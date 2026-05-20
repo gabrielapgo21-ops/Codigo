@@ -90,7 +90,7 @@ const GOLD_WORDS = new Set([
   'aurora', 'sol', 'luz', 'labs', 'curiosidade', 'coragem',
 ]);
 const CYAN_WORDS = new Set([
-  'claude', 'remotion', 'rws', 'outlier', 'onefome', 'welocalize',
+  'claude', 'remotion', 'rws', 'outlier', 'oneforma', 'welocalize',
   'runway', 'ia', 'inteligência', 'artificial', 'bento',
 ]);
 const RED_WORDS = new Set([

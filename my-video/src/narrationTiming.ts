@@ -108,7 +108,7 @@ export const NARRATION_ACTS: NarrationAct[] = [
         "end": 1486
       },
       {
-        "display": "Plataformas como RWS, Outlier, Onefome, Welocalize.",
+        "display": "Plataformas como RWS, Outlier, Oneforma, Welocalize.",
         "start": 1486,
         "end": 1740
       },
@@ -151,7 +151,7 @@ export const NARRATION_ACTS: NarrationAct[] = [
   },
   {
     "id": "ato3",
-    "durationInFrames": 2501,
+    "durationInFrames": 2502,
     "lines": [
       {
         "display": "Naquela mesma noite, me cadastrei em todas elas.",
@@ -159,160 +159,160 @@ export const NARRATION_ACTS: NarrationAct[] = [
         "end": 168
       },
       {
-        "display": "RWS. Outlier. Onefome. Welocalize.",
+        "display": "RWS. Outlier. Oneforma. Welocalize.",
         "start": 168,
-        "end": 360
+        "end": 361
       },
       {
         "display": "No começo, as tarefas eram simples.",
-        "start": 360,
-        "end": 503
+        "start": 361,
+        "end": 504
       },
       {
         "display": "Avaliar textos. Comparar respostas. Corrigir o que a IA errava.",
-        "start": 503,
-        "end": 722
+        "start": 504,
+        "end": 723
       },
       {
         "display": "Classificar imagens. Marcar o que estava certo e o que estava errado.",
-        "start": 722,
-        "end": 929
+        "start": 723,
+        "end": 930
       },
       {
         "display": "Eu fazia, e recebia. Pouco, mas recebia.",
-        "start": 929,
-        "end": 1109
+        "start": 930,
+        "end": 1110
       },
       {
         "display": "E aí algo estranho começou a acontecer.",
-        "start": 1109,
-        "end": 1239
+        "start": 1110,
+        "end": 1240
       },
       {
         "display": "Sem perceber, eu estava aprendendo como a inteligência artificial pensa por dentro.",
-        "start": 1239,
-        "end": 1487
+        "start": 1240,
+        "end": 1488
       },
       {
         "display": "Não como uma especialista. Eu não era.",
-        "start": 1487,
-        "end": 1617
+        "start": 1488,
+        "end": 1618
       },
       {
         "display": "Mas como uma aprendiz. Como alguém vendo a máquina respirar pela primeira vez.",
-        "start": 1617,
-        "end": 1837
+        "start": 1618,
+        "end": 1838
       },
       {
         "display": "Em Aurora 7, quando você descobre algo novo, o sol brilha um pouco mais forte.",
-        "start": 1837,
-        "end": 2108
+        "start": 1838,
+        "end": 2109
       },
       {
         "display": "E, devagarinho, o meu sol estava começando a despertar.",
-        "start": 2108,
-        "end": 2302
+        "start": 2109,
+        "end": 2303
       },
       {
         "display": "Eu ainda não sabia. Mas aquilo era só o começo.",
-        "start": 2302,
-        "end": 2501
+        "start": 2303,
+        "end": 2502
       }
     ]
   },
   {
     "id": "ato4",
-    "durationInFrames": 2802,
+    "durationInFrames": 2803,
     "lines": [
       {
         "display": "Mas aí eu cometi o erro clássico de quem fica animado demais.",
         "start": 0,
-        "end": 191
+        "end": 192
       },
       {
         "display": "Em poucas semanas, eu achei que já sabia tudo.",
-        "start": 191,
-        "end": 353
+        "start": 192,
+        "end": 354
       },
       {
         "display": "Achei que estava pronta pra qualquer coisa.",
-        "start": 353,
-        "end": 478
+        "start": 354,
+        "end": 479
       },
       {
         "display": "Foi quando eu vi uma ferramenta chamada Runway.",
-        "start": 478,
-        "end": 614
+        "start": 479,
+        "end": 615
       },
       {
         "display": "Diziam que dava pra criar vídeos animados com inteligência artificial.",
-        "start": 614,
-        "end": 812
+        "start": 615,
+        "end": 813
       },
       {
         "display": "Vídeos como os que eu sonhava em fazer.",
-        "start": 812,
-        "end": 926
+        "start": 813,
+        "end": 927
       },
       {
         "display": "Eu nem pensei duas vezes. Comprei o plano na hora.",
-        "start": 926,
-        "end": 1095
+        "start": 927,
+        "end": 1096
       },
       {
         "display": "Seiscentos reais. De uma vez só.",
-        "start": 1095,
-        "end": 1213
+        "start": 1096,
+        "end": 1214
       },
       {
         "display": "E aí eu tentei. E errei.",
-        "start": 1213,
-        "end": 1307
+        "start": 1214,
+        "end": 1308
       },
       {
         "display": "Tentei de novo. Errei de novo.",
-        "start": 1307,
-        "end": 1418
+        "start": 1308,
+        "end": 1419
       },
       {
         "display": "A ferramenta era boa. O problema... era eu.",
-        "start": 1418,
-        "end": 1581
+        "start": 1419,
+        "end": 1582
       },
       {
         "display": "Eu ainda não sabia usar. Não tinha a base.",
-        "start": 1581,
-        "end": 1726
+        "start": 1582,
+        "end": 1727
       },
       {
         "display": "Em Aurora 7, naquele dia, o sol apagou.",
-        "start": 1726,
-        "end": 1900
+        "start": 1727,
+        "end": 1901
       },
       {
         "display": "A cidade inteira ficou no escuro.",
-        "start": 1900,
-        "end": 2011
+        "start": 1901,
+        "end": 2012
       },
       {
         "display": "E eu fiquei ali. Sem os seiscentos reais. E sem nenhum resultado.",
-        "start": 2011,
-        "end": 2213
+        "start": 2012,
+        "end": 2214
       },
       {
         "display": "Você conhece aquele momento? Aquele pensamento que aperta o peito?",
-        "start": 2213,
-        "end": 2406
+        "start": 2214,
+        "end": 2407
       },
       {
         "display": "Talvez isso não seja pra mim. Talvez eu não seja boa o suficiente.",
-        "start": 2406,
-        "end": 2614
+        "start": 2407,
+        "end": 2615
       },
       {
         "display": "Talvez... eu devesse simplesmente desistir.",
-        "start": 2614,
-        "end": 2802
+        "start": 2615,
+        "end": 2803
       }
     ]
   },
@@ -521,4 +521,4 @@ export const NARRATION_ACTS: NarrationAct[] = [
   }
 ];
 
-export const NARRATION_TOTAL = 16086;
+export const NARRATION_TOTAL = 16088;

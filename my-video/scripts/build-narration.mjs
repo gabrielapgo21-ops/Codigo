@@ -43,7 +43,7 @@ const ACTS = [
       'E comecei a pesquisar. Sem nem saber o que procurava.',
       'Foi aí que encontrei vídeos falando sobre treinar inteligência artificial.',
       'Pessoas comuns. Ganhando dinheiro. Ensinando máquinas a pensar.',
-      'Plataformas como RWS, Outlier, Onefome, Welocalize.',
+      'Plataformas como RWS, Outlier, Oneforma, Welocalize.',
       'Empresas de verdade, que pagam gente de verdade pra melhorar a IA.',
       'Eu parei. E reli aquilo três vezes.',
       'Espera. Empresas pagam pra você conversar com uma IA?',
@@ -57,7 +57,7 @@ const ACTS = [
     id: 'ato3',
     lines: [
       'Naquela mesma noite, me cadastrei em todas elas.',
-      'RWS. Outlier. Onefome. Welocalize.',
+      'RWS. Outlier. Oneforma. Welocalize.',
       'No começo, as tarefas eram simples.',
       'Avaliar textos. Comparar respostas. Corrigir o que a IA errava.',
       'Classificar imagens. Marcar o que estava certo e o que estava errado.',
