@@ -486,12 +486,19 @@ const ActForeground: React.FC<{act: ResolvedAct}> = ({act}) => {
 
       {act.lines.map((line, i) => {
         const {start, end} = line;
-        const opacity = interpolate(
-          frame,
-          [start, start + 12, end - 12, end],
-          [0, 1, 1, 0],
-          {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
-        );
+        const len = end - start;
+        let opacity: number;
+        if (len < 6) {
+          opacity = frame >= start && frame < end ? 1 : 0;
+        } else {
+          const fade = Math.min(12, Math.floor(len / 2) - 1);
+          opacity = interpolate(
+            frame,
+            [start, start + fade, end - fade, end],
+            [0, 1, 1, 0],
+            {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
+          );
+        }
         if (opacity <= 0.001) return null;
         const rise = spring({
           frame: Math.max(0, frame - start),
