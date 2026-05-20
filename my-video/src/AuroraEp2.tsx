@@ -2,7 +2,8 @@ import React from 'react';
 import {
   AbsoluteFill,
   Audio,
-  Easing,
+  Img,
+  Loop,
   OffthreadVideo,
   Sequence,
   interpolate,
@@ -13,23 +14,52 @@ import {
 } from 'remotion';
 
 // ============================================================
-// ASSET CONTRACT — coloca estes arquivos em my-video/public/
-// e faz git push. Depois vira os flags abaixo para true.
+// ASSETS
+// ------------------------------------------------------------
+// CLIPES (já no repo, em my-video/public/):
+//   lina_intro.mp4, lina_correndo.mp4, lina_bento.mp4, lina_vitoria.mp4
+//
+// IMAGENS DE REFERÊNCIA — ainda NÃO no repo. As fotos enviadas no
+// chat não chegaram como arquivos. Faz git push destas 6 para
+// my-video/public/ e depois vira HAS_REF_IMAGES para true:
+//   ref_horizon_tower.png  — Lina de costas, torre dourada no horizonte
+//   ref_crowd_holo.png     — Lina + Bento na multidão, hologramas azuis
+//   ref_chase_bridge.png   — Lina + Bento correndo, drones vermelhos
+//   ref_golden_dome.png    — Lina + Bento sob a cúpula dourada
+//   ref_lina_sheet.png     — folha de poses da Lina
+//   ref_bento_sheet.png    — folha de poses do Bento
 // ============================================================
-const EP2 = {
-  // Vídeo talking-head da Lina (episódio inteiro, contínuo).
-  linaVideo: 'lina_ep2.mp4',
-  // Narração separada (opcional). Se usares, o áudio do vídeo é mutado.
-  narrationAudio: 'narration_ep2.mp3',
-};
 
-// Vira para true DEPOIS de pushar my-video/public/lina_ep2.mp4
-const HAS_LINA_VIDEO = false;
-// Vira para true DEPOIS de pushar my-video/public/narration_ep2.mp3
-const HAS_NARRATION_AUDIO = false;
+const CLIPS_READY = true;
+const HAS_REF_IMAGES = false; // vira true depois de pushar as 6 imagens
+const HAS_NARRATION_AUDIO = false; // vira true depois de pushar narration_ep2.mp3
 
-// Caixa onde o vídeo da Lina aparece (a cidade fica em volta).
-const VIDEO_BOX = {width: 1000, height: 760, top: 120};
+const NARRATION_AUDIO = 'narration_ep2.mp3';
+const CLIP_PLAYBACK = 0.5; // câmera lenta cinematográfica
+
+// Clipes da Lina. loopFrames = duração no timeline (30fps) já com o
+// playbackRate aplicado, para o <Loop> repetir sem corte.
+const CLIPS = {
+  intro: {file: 'lina_intro.mp4', loopFrames: 600},
+  correndo: {file: 'lina_correndo.mp4', loopFrames: 302},
+  bento: {file: 'lina_bento.mp4', loopFrames: 302},
+  vitoria: {file: 'lina_vitoria.mp4', loopFrames: 302},
+} as const;
+
+const IMAGES = {
+  horizon_tower: 'ref_horizon_tower.png',
+  crowd_holo: 'ref_crowd_holo.png',
+  chase_bridge: 'ref_chase_bridge.png',
+  golden_dome: 'ref_golden_dome.png',
+  lina_sheet: 'ref_lina_sheet.png',
+  bento_sheet: 'ref_bento_sheet.png',
+} as const;
+
+type ClipName = keyof typeof CLIPS;
+type ImageName = keyof typeof IMAGES;
+type Shot =
+  | {kind: 'clip'; clip: ClipName}
+  | {kind: 'image'; image: ImageName};
 
 // ============================================================
 // Paleta
@@ -41,11 +71,18 @@ const RED = '#FF4444';
 const BLACK = '#000000';
 const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
 
+const COVER: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+};
+
 // ============================================================
 // Helpers
 // ============================================================
 
-// Amostra uma curva de keyframes [frame, valor].
+const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
+
 const sampleKeyframes = (
   frame: number,
   kf: ReadonlyArray<readonly [number, number]>
@@ -84,6 +121,7 @@ const CYAN_WORDS = new Set([
   'ia',
   'inteligência',
   'artificial',
+  'bento',
 ]);
 const RED_WORDS = new Set([
   'erro',
@@ -128,7 +166,7 @@ const HighlightedText: React.FC<{text: string}> = ({text}) => {
 };
 
 // ============================================================
-// Cidade de Aurora — render procedural (acende/apaga)
+// Cidade de Aurora — fallback procedural (se CLIPS_READY for false)
 // ============================================================
 
 const BUILDINGS: ReadonlyArray<{x: number; w: number; h: number}> = [
@@ -149,13 +187,9 @@ const BUILDINGS: ReadonlyArray<{x: number; w: number; h: number}> = [
 ];
 
 const CityBackground: React.FC<{brightness: number}> = ({brightness}) => {
-  const b = Math.max(0, Math.min(1, brightness));
-  const sunScale = 0.2 + b * 1.0;
-  const windowOpacity = 0.06 + b * 0.9;
-
+  const b = clamp01(brightness);
   return (
     <AbsoluteFill style={{backgroundColor: '#05060a'}}>
-      {/* Atmosfera dourada — opacidade segue o brilho */}
       <AbsoluteFill
         style={{
           background:
@@ -163,8 +197,6 @@ const CityBackground: React.FC<{brightness: number}> = ({brightness}) => {
           opacity: b * 0.8,
         }}
       />
-
-      {/* Sol */}
       <div
         style={{
           position: 'absolute',
@@ -177,12 +209,9 @@ const CityBackground: React.FC<{brightness: number}> = ({brightness}) => {
           background:
             'radial-gradient(circle, #FFF6D0 0%, #FFD700 35%, #FF9D2E 60%, transparent 75%)',
           opacity: Math.min(1, b * 1.2),
-          transform: `scale(${sunScale})`,
-          filter: 'blur(2px)',
+          transform: `scale(${0.2 + b})`,
         }}
       />
-
-      {/* Prédios */}
       {BUILDINGS.map((bld, i) => {
         const cols = Math.max(1, Math.floor(bld.w / 38));
         const rows = Math.max(1, Math.floor(bld.h / 52));
@@ -196,7 +225,6 @@ const CityBackground: React.FC<{brightness: number}> = ({brightness}) => {
               width: bld.w,
               height: bld.h,
               backgroundColor: '#0a0a13',
-              borderTop: '1px solid #15151f',
               display: 'flex',
               flexWrap: 'wrap',
               alignContent: 'flex-start',
@@ -206,7 +234,6 @@ const CityBackground: React.FC<{brightness: number}> = ({brightness}) => {
             }}
           >
             {Array.from({length: cols * rows}).map((_, j) => {
-              // Padrão determinístico de janelas acesas/apagadas.
               const lit = (i * 7 + j * 13) % 5 !== 0;
               return (
                 <div
@@ -215,7 +242,7 @@ const CityBackground: React.FC<{brightness: number}> = ({brightness}) => {
                     width: 14,
                     height: 20,
                     backgroundColor: GOLD,
-                    opacity: lit ? windowOpacity : windowOpacity * 0.25,
+                    opacity: (0.06 + b * 0.9) * (lit ? 1 : 0.25),
                   }}
                 />
               );
@@ -223,13 +250,130 @@ const CityBackground: React.FC<{brightness: number}> = ({brightness}) => {
           </div>
         );
       })}
+    </AbsoluteFill>
+  );
+};
 
-      {/* Vinheta — escurece as bordas, mais forte quando a cidade apaga */}
+// ============================================================
+// Uma "tomada" — clipe em loop ou imagem, com Ken Burns
+// ============================================================
+
+const ShotView: React.FC<{
+  shot: Shot;
+  progress: number;
+  filter: string;
+}> = ({shot, progress, filter}) => {
+  const scale = 1.05 + progress * 0.1;
+  const driftX = progress * -26;
+
+  return (
+    <AbsoluteFill
+      style={{
+        transform: `scale(${scale}) translateX(${driftX}px)`,
+        filter,
+      }}
+    >
+      {shot.kind === 'clip' ? (
+        <Loop durationInFrames={CLIPS[shot.clip].loopFrames}>
+          <OffthreadVideo
+            src={staticFile(CLIPS[shot.clip].file)}
+            playbackRate={CLIP_PLAYBACK}
+            muted
+            style={COVER}
+          />
+        </Loop>
+      ) : (
+        <Img src={staticFile(IMAGES[shot.image])} style={COVER} />
+      )}
+    </AbsoluteFill>
+  );
+};
+
+// ============================================================
+// Fundo do ato — sequência de tomadas com crossfade
+// ============================================================
+
+const SHOT_FADE = 16;
+
+const ActBackground: React.FC<{act: ActConfig}> = ({act}) => {
+  const frame = useCurrentFrame();
+  const b = sampleKeyframes(frame, act.brightness);
+
+  if (!CLIPS_READY) {
+    return <CityBackground brightness={b} />;
+  }
+
+  const shots: Shot[] = HAS_REF_IMAGES
+    ? act.shots
+    : [{kind: 'clip', clip: act.clip}];
+  const slot = act.durationInFrames / shots.length;
+
+  const filterBrightness = 0.32 + b * 0.9;
+  const filterSaturate = 0.85 + b * 0.5;
+  const filter = `brightness(${filterBrightness.toFixed(
+    3
+  )}) saturate(${filterSaturate.toFixed(3)})`;
+
+  // Escuridão — entra quando o brilho cai (apagão do Ato 4 / início do 5)
+  const darkness = clamp01((0.34 - b) / 0.34);
+
+  return (
+    <AbsoluteFill style={{backgroundColor: BLACK}}>
+      {shots.map((shot, i) => {
+        const s = i * slot;
+        const e = (i + 1) * slot;
+        const isFirst = i === 0;
+        const isLast = i === shots.length - 1;
+
+        let opacity: number;
+        if (shots.length === 1) {
+          opacity = 1;
+        } else if (isFirst) {
+          opacity = interpolate(
+            frame,
+            [e - SHOT_FADE, e + SHOT_FADE],
+            [1, 0],
+            {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
+          );
+        } else if (isLast) {
+          opacity = interpolate(
+            frame,
+            [s - SHOT_FADE, s + SHOT_FADE],
+            [0, 1],
+            {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
+          );
+        } else {
+          opacity = interpolate(
+            frame,
+            [s - SHOT_FADE, s + SHOT_FADE, e - SHOT_FADE, e + SHOT_FADE],
+            [0, 1, 1, 0],
+            {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
+          );
+        }
+        if (opacity <= 0.001) return null;
+
+        const progress = interpolate(frame, [s, e], [0, 1], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        });
+
+        return (
+          <AbsoluteFill key={i} style={{opacity}}>
+            <ShotView shot={shot} progress={progress} filter={filter} />
+          </AbsoluteFill>
+        );
+      })}
+
+      {/* Escuridão da história */}
+      <AbsoluteFill
+        style={{backgroundColor: BLACK, opacity: darkness}}
+      />
+
+      {/* Gradiente inferior — legibilidade das legendas */}
       <AbsoluteFill
         style={{
           background:
-            'radial-gradient(ellipse at 50% 45%, transparent 40%, #000000 100%)',
-          opacity: 0.35 + (1 - b) * 0.5,
+            'linear-gradient(to bottom, transparent 48%, #000000e6 100%)',
         }}
       />
     </AbsoluteFill>
@@ -237,110 +381,7 @@ const CityBackground: React.FC<{brightness: number}> = ({brightness}) => {
 };
 
 // ============================================================
-// Palco da Lina — vídeo talking-head ou placeholder
-// ============================================================
-
-const LinaStage: React.FC = () => {
-  const frame = useCurrentFrame();
-  // Respiração sutil no enquadramento.
-  const float = Math.sin(frame / 36) * 6;
-
-  return (
-    <AbsoluteFill style={{justifyContent: 'flex-start', alignItems: 'center'}}>
-      <div
-        style={{
-          position: 'absolute',
-          top: VIDEO_BOX.top,
-          width: VIDEO_BOX.width,
-          height: VIDEO_BOX.height,
-          transform: `translateY(${float}px)`,
-          borderRadius: 18,
-          overflow: 'hidden',
-          border: '1px solid #2a2a38',
-          boxShadow: '0 0 80px #00000099, 0 0 40px #FFD70022',
-          backgroundColor: '#0a0a12',
-        }}
-      >
-        {HAS_LINA_VIDEO ? (
-          <OffthreadVideo
-            src={staticFile(EP2.linaVideo)}
-            muted={HAS_NARRATION_AUDIO}
-            style={{width: '100%', height: '100%', objectFit: 'cover'}}
-          />
-        ) : (
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              background:
-                'linear-gradient(160deg, #1c1c2b 0%, #14141f 60%, #0d0d16 100%)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: FONT,
-            }}
-          >
-            {/* Silhueta simples da personagem */}
-            <div
-              style={{
-                width: 150,
-                height: 150,
-                borderRadius: '50%',
-                backgroundColor: '#2c2c40',
-              }}
-            />
-            <div
-              style={{
-                width: 320,
-                height: 200,
-                marginTop: -10,
-                borderRadius: '160px 160px 0 0',
-                backgroundColor: '#2c2c40',
-              }}
-            />
-            <div
-              style={{
-                marginTop: 28,
-                color: '#5a5a72',
-                fontSize: 22,
-                letterSpacing: 2,
-              }}
-            >
-              [ vídeo da Lina — public/{EP2.linaVideo} ]
-            </div>
-          </div>
-        )}
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// ============================================================
-// Tipos / config dos atos
-// ============================================================
-
-type ActConfig = {
-  id: string;
-  label: string;
-  durationInFrames: number;
-  brightness: ReadonlyArray<readonly [number, number]>;
-  lines: string[];
-  flashFrame?: number;
-};
-
-// ============================================================
-// Fundo do ato (cidade) — lê o frame local e calcula o brilho
-// ============================================================
-
-const ActBackground: React.FC<{act: ActConfig}> = ({act}) => {
-  const frame = useCurrentFrame();
-  const brightness = sampleKeyframes(frame, act.brightness);
-  return <CityBackground brightness={brightness} />;
-};
-
-// ============================================================
-// Frente do ato — legendas, rótulo, flashes e fades
+// Frente do ato — legendas, rótulo, flash, fades
 // ============================================================
 
 const ActForeground: React.FC<{act: ActConfig}> = ({act}) => {
@@ -348,18 +389,15 @@ const ActForeground: React.FC<{act: ActConfig}> = ({act}) => {
   const {fps} = useVideoConfig();
   const dur = act.durationInFrames;
 
-  // Rótulo do ato
   const labelOpacity = interpolate(
     frame,
-    [0, 20, 90, 120],
+    [0, 20, 95, 125],
     [0, 1, 1, 0],
     {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
   );
 
-  // Legendas — um slot igual por fala
   const slot = dur / act.lines.length;
 
-  // Fade de entrada / saída (corte dramático entre atos)
   const fadeIn = interpolate(frame, [0, 15], [1, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
@@ -370,7 +408,6 @@ const ActForeground: React.FC<{act: ActConfig}> = ({act}) => {
   });
   const blackOpacity = Math.max(fadeIn, fadeOut);
 
-  // Flash branco no apagão (Ato 4)
   const flash =
     act.flashFrame !== undefined
       ? interpolate(
@@ -383,11 +420,10 @@ const ActForeground: React.FC<{act: ActConfig}> = ({act}) => {
 
   return (
     <AbsoluteFill style={{fontFamily: FONT}}>
-      {/* Rótulo do ato */}
       <div
         style={{
           position: 'absolute',
-          top: 44,
+          top: 50,
           width: '100%',
           textAlign: 'center',
           color: CYAN,
@@ -395,12 +431,12 @@ const ActForeground: React.FC<{act: ActConfig}> = ({act}) => {
           textTransform: 'uppercase',
           letterSpacing: '8px',
           opacity: labelOpacity,
+          textShadow: '0 2px 12px #000000',
         }}
       >
         {act.label}
       </div>
 
-      {/* Legendas */}
       {act.lines.map((line, i) => {
         const start = i * slot;
         const end = start + slot;
@@ -421,24 +457,25 @@ const ActForeground: React.FC<{act: ActConfig}> = ({act}) => {
             key={i}
             style={{
               position: 'absolute',
-              bottom: 70,
+              bottom: 84,
               left: '50%',
-              width: 1400,
-              marginLeft: -700,
+              width: 1440,
+              marginLeft: -720,
               opacity,
-              transform: `translateY(${(1 - rise) * 24}px)`,
+              transform: `translateY(${(1 - rise) * 26}px)`,
             }}
           >
             <div
               style={{
                 backgroundColor: '#000000bb',
-                border: '1px solid #ffffff14',
+                border: '1px solid #ffffff1f',
                 borderRadius: 14,
-                padding: '20px 34px',
+                padding: '22px 36px',
                 textAlign: 'center',
-                fontSize: 34,
+                fontSize: 36,
                 lineHeight: 1.4,
                 color: WHITE,
+                textShadow: '0 2px 10px #000000',
               }}
             >
               <HighlightedText text={line} />
@@ -447,14 +484,12 @@ const ActForeground: React.FC<{act: ActConfig}> = ({act}) => {
         );
       })}
 
-      {/* Flash branco */}
       {flash > 0 && (
         <AbsoluteFill
           style={{backgroundColor: WHITE, opacity: flash, pointerEvents: 'none'}}
         />
       )}
 
-      {/* Fade preto */}
       <AbsoluteFill
         style={{
           backgroundColor: BLACK,
@@ -467,8 +502,19 @@ const ActForeground: React.FC<{act: ActConfig}> = ({act}) => {
 };
 
 // ============================================================
-// Roteiro — Aurora 7, Ep 2: "O Apagão"
+// Tipos / roteiro — Aurora 7, Ep 2: "O Apagão"
 // ============================================================
+
+type ActConfig = {
+  id: string;
+  label: string;
+  durationInFrames: number;
+  brightness: ReadonlyArray<readonly [number, number]>;
+  lines: string[];
+  clip: ClipName;
+  shots: Shot[];
+  flashFrame?: number;
+};
 
 const ACTS: ActConfig[] = [
   {
@@ -478,6 +524,11 @@ const ACTS: ActConfig[] = [
     brightness: [
       [0, 0.82],
       [2700, 0.9],
+    ],
+    clip: 'intro',
+    shots: [
+      {kind: 'image', image: 'horizon_tower'},
+      {kind: 'clip', clip: 'intro'},
     ],
     lines: [
       'Olá. Eu sou a Lina. E há duas semanas eu não sabia nada sobre IA.',
@@ -494,6 +545,11 @@ const ACTS: ActConfig[] = [
     brightness: [
       [0, 0.35],
       [3600, 0.42],
+    ],
+    clip: 'intro',
+    shots: [
+      {kind: 'clip', clip: 'intro'},
+      {kind: 'image', image: 'crowd_holo'},
     ],
     lines: [
       'Tudo começou num dia comum. Sem planos grandes. Sem grandes ideias.',
@@ -513,8 +569,10 @@ const ACTS: ActConfig[] = [
     durationInFrames: 2700,
     brightness: [
       [0, 0.4],
-      [2700, 0.74],
+      [2700, 0.78],
     ],
+    clip: 'intro',
+    shots: [{kind: 'clip', clip: 'intro'}],
     lines: [
       'Me cadastrei em todas. RWS. Outlier. Onefome. Welocalize.',
       'Comecei a fazer tarefas simples. Avaliar textos. Corrigir respostas de IA. Classificar imagens.',
@@ -536,6 +594,11 @@ const ACTS: ActConfig[] = [
       [2700, 0.0],
     ],
     flashFrame: 1500,
+    clip: 'correndo',
+    shots: [
+      {kind: 'image', image: 'chase_bridge'},
+      {kind: 'clip', clip: 'correndo'},
+    ],
     lines: [
       'Mas aí... eu fiz o erro clássico de quem está animado demais.',
       'Achei que sabia tudo. Que estava pronta.',
@@ -556,9 +619,14 @@ const ACTS: ActConfig[] = [
     durationInFrames: 2700,
     brightness: [
       [0, 0.0],
-      [500, 0.05],
-      [900, 0.14],
-      [2700, 0.58],
+      [500, 0.08],
+      [900, 0.22],
+      [2700, 0.64],
+    ],
+    clip: 'bento',
+    shots: [
+      {kind: 'image', image: 'golden_dome'},
+      {kind: 'clip', clip: 'bento'},
     ],
     lines: [
       'Mas sabe o que é engraçado sobre o escuro?',
@@ -578,8 +646,14 @@ const ACTS: ActConfig[] = [
     label: 'Ato 6 — O Nascimento do Canal',
     durationInFrames: 1800,
     brightness: [
-      [0, 0.58],
+      [0, 0.6],
       [1800, 1.0],
+    ],
+    clip: 'vitoria',
+    shots: [
+      {kind: 'clip', clip: 'vitoria'},
+      {kind: 'image', image: 'lina_sheet'},
+      {kind: 'image', image: 'bento_sheet'},
     ],
     lines: [
       'Foi aí que nasceu a Aurora Labs.',
@@ -599,6 +673,11 @@ const ACTS: ActConfig[] = [
       [0, 1.0],
       [1800, 1.0],
     ],
+    clip: 'vitoria',
+    shots: [
+      {kind: 'clip', clip: 'vitoria'},
+      {kind: 'image', image: 'horizon_tower'},
+    ],
     lines: [
       'Nos próximos episódios vou te mostrar exatamente como fiz tudo isso.',
       'As ferramentas que usei. Os erros que cometi. E como você pode fazer também.',
@@ -614,7 +693,6 @@ const ACTS: ActConfig[] = [
 // ============================================================
 
 export const AuroraEp2: React.FC = () => {
-  // Frames de início acumulados para cada ato.
   let cursor = 0;
   const starts = ACTS.map((act) => {
     const s = cursor;
@@ -624,33 +702,18 @@ export const AuroraEp2: React.FC = () => {
 
   return (
     <AbsoluteFill style={{backgroundColor: BLACK}}>
-      {/* Camada 1 — fundos (cidade) por ato */}
       {ACTS.map((act, i) => (
         <Sequence
-          key={`bg-${act.id}`}
+          key={act.id}
           from={starts[i]}
           durationInFrames={act.durationInFrames}
         >
           <ActBackground act={act} />
-        </Sequence>
-      ))}
-
-      {/* Camada 2 — vídeo contínuo da Lina */}
-      <LinaStage />
-
-      {/* Camada 3 — legendas / rótulos / fades por ato */}
-      {ACTS.map((act, i) => (
-        <Sequence
-          key={`fg-${act.id}`}
-          from={starts[i]}
-          durationInFrames={act.durationInFrames}
-        >
           <ActForeground act={act} />
         </Sequence>
       ))}
 
-      {/* Narração (opcional) */}
-      {HAS_NARRATION_AUDIO && <Audio src={staticFile(EP2.narrationAudio)} />}
+      {HAS_NARRATION_AUDIO && <Audio src={staticFile(NARRATION_AUDIO)} />}
     </AbsoluteFill>
   );
 };
