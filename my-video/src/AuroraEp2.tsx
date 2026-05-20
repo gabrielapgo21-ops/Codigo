@@ -19,19 +19,16 @@ import {
 // CLIPES (já no repo, em my-video/public/):
 //   lina_intro.mp4, lina_correndo.mp4, lina_bento.mp4, lina_vitoria.mp4
 //
-// IMAGENS DE REFERÊNCIA — ainda NÃO no repo. As fotos enviadas no
-// chat não chegaram como arquivos. Faz git push destas 6 para
-// my-video/public/ e depois vira HAS_REF_IMAGES para true:
-//   ref_horizon_tower.png  — Lina de costas, torre dourada no horizonte
-//   ref_crowd_holo.png     — Lina + Bento na multidão, hologramas azuis
-//   ref_chase_bridge.png   — Lina + Bento correndo, drones vermelhos
-//   ref_golden_dome.png    — Lina + Bento sob a cúpula dourada
-//   ref_lina_sheet.png     — folha de poses da Lina
-//   ref_bento_sheet.png    — folha de poses do Bento
+// IMAGENS DE REFERÊNCIA (já no repo, em my-video/public/):
+//   aurora7_scene1.png                — Lina + Bento na praça dourada
+//   aurora7_scene4_tower_run.png      — Lina + Bento correndo, drones
+//   aurora7_scene5_truth_room.png     — Lina + Bento sob a cúpula dourada
+//   aurora7_character_lina_sheet.png  — folha de poses da Lina
+//   aurora7_character_bento_sheet.png — folha de poses do Bento
 // ============================================================
 
 const CLIPS_READY = true;
-const HAS_REF_IMAGES = false; // vira true depois de pushar as 6 imagens
+const HAS_REF_IMAGES = true;
 const HAS_NARRATION_AUDIO = false; // vira true depois de pushar narration_ep2.mp3
 
 const NARRATION_AUDIO = 'narration_ep2.mp3';
@@ -47,19 +44,18 @@ const CLIPS = {
 } as const;
 
 const IMAGES = {
-  horizon_tower: 'ref_horizon_tower.png',
-  crowd_holo: 'ref_crowd_holo.png',
-  chase_bridge: 'ref_chase_bridge.png',
-  golden_dome: 'ref_golden_dome.png',
-  lina_sheet: 'ref_lina_sheet.png',
-  bento_sheet: 'ref_bento_sheet.png',
+  city_plaza: 'aurora7_scene1.png',
+  tower_run: 'aurora7_scene4_tower_run.png',
+  truth_room: 'aurora7_scene5_truth_room.png',
+  lina_sheet: 'aurora7_character_lina_sheet.png',
+  bento_sheet: 'aurora7_character_bento_sheet.png',
 } as const;
 
 type ClipName = keyof typeof CLIPS;
 type ImageName = keyof typeof IMAGES;
 type Shot =
   | {kind: 'clip'; clip: ClipName}
-  | {kind: 'image'; image: ImageName};
+  | {kind: 'image'; image: ImageName; fit?: 'cover' | 'contain'};
 
 // ============================================================
 // Paleta
@@ -282,6 +278,19 @@ const ShotView: React.FC<{
             style={COVER}
           />
         </Loop>
+      ) : shot.fit === 'contain' ? (
+        <AbsoluteFill
+          style={{
+            backgroundColor: '#070708',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Img
+            src={staticFile(IMAGES[shot.image])}
+            style={{maxWidth: '92%', maxHeight: '92%', objectFit: 'contain'}}
+          />
+        </AbsoluteFill>
       ) : (
         <Img src={staticFile(IMAGES[shot.image])} style={COVER} />
       )}
@@ -527,7 +536,7 @@ const ACTS: ActConfig[] = [
     ],
     clip: 'intro',
     shots: [
-      {kind: 'image', image: 'horizon_tower'},
+      {kind: 'image', image: 'city_plaza'},
       {kind: 'clip', clip: 'intro'},
     ],
     lines: [
@@ -549,7 +558,7 @@ const ACTS: ActConfig[] = [
     clip: 'intro',
     shots: [
       {kind: 'clip', clip: 'intro'},
-      {kind: 'image', image: 'crowd_holo'},
+      {kind: 'image', image: 'city_plaza'},
     ],
     lines: [
       'Tudo começou num dia comum. Sem planos grandes. Sem grandes ideias.',
@@ -572,7 +581,10 @@ const ACTS: ActConfig[] = [
       [2700, 0.78],
     ],
     clip: 'intro',
-    shots: [{kind: 'clip', clip: 'intro'}],
+    shots: [
+      {kind: 'clip', clip: 'intro'},
+      {kind: 'image', image: 'city_plaza'},
+    ],
     lines: [
       'Me cadastrei em todas. RWS. Outlier. Onefome. Welocalize.',
       'Comecei a fazer tarefas simples. Avaliar textos. Corrigir respostas de IA. Classificar imagens.',
@@ -596,7 +608,7 @@ const ACTS: ActConfig[] = [
     flashFrame: 1500,
     clip: 'correndo',
     shots: [
-      {kind: 'image', image: 'chase_bridge'},
+      {kind: 'image', image: 'tower_run'},
       {kind: 'clip', clip: 'correndo'},
     ],
     lines: [
@@ -625,7 +637,7 @@ const ACTS: ActConfig[] = [
     ],
     clip: 'bento',
     shots: [
-      {kind: 'image', image: 'golden_dome'},
+      {kind: 'image', image: 'truth_room'},
       {kind: 'clip', clip: 'bento'},
     ],
     lines: [
@@ -652,8 +664,8 @@ const ACTS: ActConfig[] = [
     clip: 'vitoria',
     shots: [
       {kind: 'clip', clip: 'vitoria'},
-      {kind: 'image', image: 'lina_sheet'},
-      {kind: 'image', image: 'bento_sheet'},
+      {kind: 'image', image: 'lina_sheet', fit: 'contain'},
+      {kind: 'image', image: 'bento_sheet', fit: 'contain'},
     ],
     lines: [
       'Foi aí que nasceu a Aurora Labs.',
@@ -676,7 +688,7 @@ const ACTS: ActConfig[] = [
     clip: 'vitoria',
     shots: [
       {kind: 'clip', clip: 'vitoria'},
-      {kind: 'image', image: 'horizon_tower'},
+      {kind: 'image', image: 'city_plaza'},
     ],
     lines: [
       'Nos próximos episódios vou te mostrar exatamente como fiz tudo isso.',
