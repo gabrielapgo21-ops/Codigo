@@ -295,9 +295,9 @@ const STAGE: StageAct[] = [
       {kind: 'image', image: 'tower_run'},
       {kind: 'clip', clip: 'correndo'},
     ],
-    // O apagão acontece exatamente na fala "o sol apagou" (índice 6).
+    // O apagão acontece exatamente na fala "o sol apagou" (índice 12).
     brightness: (d, lines) => {
-      const bo = lines[6] ? lines[6].start : Math.round(d * 0.6);
+      const bo = lines[12] ? lines[12].start : Math.round(d * 0.6);
       return [
         [0, 0.9],
         [Math.max(1, bo - 30), 0.95],
@@ -305,7 +305,7 @@ const STAGE: StageAct[] = [
         [d, 0.0],
       ];
     },
-    flashFrame: (d, lines) => (lines[6] ? lines[6].start + 4 : Math.round(d * 0.6)),
+    flashFrame: (d, lines) => (lines[12] ? lines[12].start + 4 : Math.round(d * 0.6)),
   },
   {
     id: 'ato5',

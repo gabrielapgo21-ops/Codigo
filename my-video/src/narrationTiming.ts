@@ -9,38 +9,63 @@ export type NarrationAct = {
 export const NARRATION_ACTS: NarrationAct[] = [
   {
     "id": "ato1",
-    "durationInFrames": 1156,
+    "durationInFrames": 1674,
     "lines": [
       {
-        "display": "Olá. Eu sou a Lina. E há duas semanas eu não sabia nada sobre IA.",
+        "display": "Olá. Eu sou a Lina.",
         "start": 16,
-        "end": 228
+        "end": 100
       },
       {
-        "display": "Gastei R$600 numa ferramenta que não funcionou. Fiquei no escuro.",
-        "start": 228,
-        "end": 443
+        "display": "E há duas semanas, eu não sabia absolutamente nada sobre inteligência artificial.",
+        "start": 100,
+        "end": 359
       },
       {
-        "display": "Mas como Aurora 7 apaga... eu não desisto até encontrar uma nova luz.",
-        "start": 443,
-        "end": 683
+        "display": "Nada. Zero.",
+        "start": 359,
+        "end": 427
       },
       {
-        "display": "E foi aí que tudo mudou. Foi quando esse canal surgiu. Foi quando o sol de Aurora brilhou.",
-        "start": 683,
-        "end": 950
+        "display": "Eu gastei seiscentos reais numa ferramenta que não funcionou.",
+        "start": 427,
+        "end": 593
       },
       {
-        "display": "Vou contar pra vocês essa história. Como tudo começou.",
-        "start": 950,
-        "end": 1156
+        "display": "Fiquei sem dinheiro. E fiquei no escuro.",
+        "start": 593,
+        "end": 720
+      },
+      {
+        "display": "Mas tem uma coisa sobre Aurora 7, a minha cidade: quando o sol apaga, ele sempre volta.",
+        "start": 720,
+        "end": 1035
+      },
+      {
+        "display": "E eu não desisto até encontrar uma nova luz.",
+        "start": 1035,
+        "end": 1172
+      },
+      {
+        "display": "Foi aí que tudo mudou. Foi quando esse canal nasceu.",
+        "start": 1172,
+        "end": 1339
+      },
+      {
+        "display": "Foi quando o sol de Aurora brilhou de novo.",
+        "start": 1339,
+        "end": 1465
+      },
+      {
+        "display": "Senta aí. Eu vou te contar essa história desde o começo.",
+        "start": 1465,
+        "end": 1674
       }
     ]
   },
   {
     "id": "ato2",
-    "durationInFrames": 2042,
+    "durationInFrames": 2988,
     "lines": [
       {
         "display": "Tudo começou num dia comum. Sem planos grandes. Sem grandes ideias.",
@@ -48,277 +73,452 @@ export const NARRATION_ACTS: NarrationAct[] = [
         "end": 219
       },
       {
-        "display": "Eu estava perdida. Sem saber o que fazer. Precisava de uma renda extra.",
+        "display": "Eu só sabia de uma coisa: eu estava perdida.",
         "start": 219,
-        "end": 450
+        "end": 377
       },
       {
-        "display": "Então abri o computador. E comecei a pesquisar.",
-        "start": 450,
-        "end": 600
+        "display": "Sem saber o que fazer da vida. Precisando de uma renda extra.",
+        "start": 377,
+        "end": 568
       },
       {
-        "display": "Foi aí que encontrei canais falando sobre como ganhar dinheiro treinando inteligência artificial.",
-        "start": 600,
-        "end": 866
+        "display": "As contas chegavam. E eu não tinha resposta.",
+        "start": 568,
+        "end": 714
+      },
+      {
+        "display": "Então, num fim de tarde qualquer, eu abri o computador.",
+        "start": 714,
+        "end": 916
+      },
+      {
+        "display": "E comecei a pesquisar. Sem nem saber o que procurava.",
+        "start": 916,
+        "end": 1082
+      },
+      {
+        "display": "Foi aí que encontrei vídeos falando sobre treinar inteligência artificial.",
+        "start": 1082,
+        "end": 1283
+      },
+      {
+        "display": "Pessoas comuns. Ganhando dinheiro. Ensinando máquinas a pensar.",
+        "start": 1283,
+        "end": 1486
       },
       {
         "display": "Plataformas como RWS, Outlier, Onefome, Welocalize.",
-        "start": 866,
-        "end": 1120
+        "start": 1486,
+        "end": 1740
       },
       {
-        "display": "Empresas que pagam pessoas comuns para ensinar máquinas a pensar.",
-        "start": 1120,
-        "end": 1304
+        "display": "Empresas de verdade, que pagam gente de verdade pra melhorar a IA.",
+        "start": 1740,
+        "end": 1957
       },
       {
-        "display": "Espera. Empresas pagam pra você... conversar com IA? Avaliar respostas? Ensinar robôs?",
-        "start": 1304,
-        "end": 1603
+        "display": "Eu parei. E reli aquilo três vezes.",
+        "start": 1957,
+        "end": 2089
       },
       {
-        "display": "Eu não precisava saber programar. Não precisava de diploma. Precisava só de curiosidade.",
-        "start": 1603,
-        "end": 1872
+        "display": "Espera. Empresas pagam pra você conversar com uma IA?",
+        "start": 2089,
+        "end": 2257
       },
       {
-        "display": "E curiosidade... eu tinha de sobra.",
-        "start": 1872,
-        "end": 2042
+        "display": "Pra avaliar respostas? Pra corrigir robôs? Pra ensinar uma máquina?",
+        "start": 2257,
+        "end": 2462
+      },
+      {
+        "display": "Eu não precisava saber programar. Não precisava de diploma.",
+        "start": 2462,
+        "end": 2643
+      },
+      {
+        "display": "Eu só precisava de uma coisa: curiosidade.",
+        "start": 2643,
+        "end": 2795
+      },
+      {
+        "display": "E curiosidade... isso eu sempre tive de sobra.",
+        "start": 2795,
+        "end": 2988
       }
     ]
   },
   {
     "id": "ato3",
-    "durationInFrames": 1539,
+    "durationInFrames": 2501,
     "lines": [
       {
-        "display": "Me cadastrei em todas. RWS. Outlier. Onefome. Welocalize.",
+        "display": "Naquela mesma noite, me cadastrei em todas elas.",
         "start": 0,
-        "end": 259
+        "end": 168
       },
       {
-        "display": "Comecei a fazer tarefas simples. Avaliar textos. Corrigir respostas de IA. Classificar imagens.",
-        "start": 259,
-        "end": 575
+        "display": "RWS. Outlier. Onefome. Welocalize.",
+        "start": 168,
+        "end": 360
       },
       {
-        "display": "E algo estranho aconteceu.",
-        "start": 575,
-        "end": 666
+        "display": "No começo, as tarefas eram simples.",
+        "start": 360,
+        "end": 503
       },
       {
-        "display": "Eu comecei a entender como a inteligência artificial funciona por dentro.",
-        "start": 666,
-        "end": 866
+        "display": "Avaliar textos. Comparar respostas. Corrigir o que a IA errava.",
+        "start": 503,
+        "end": 722
       },
       {
-        "display": "Não como especialista. Como aprendiz. Como alguém que estava vendo a máquina respirar.",
-        "start": 866,
-        "end": 1115
+        "display": "Classificar imagens. Marcar o que estava certo e o que estava errado.",
+        "start": 722,
+        "end": 929
       },
       {
-        "display": "Em Aurora 7, quando você descobre algo novo... o sol brilha um pouco mais.",
-        "start": 1115,
-        "end": 1377
+        "display": "Eu fazia, e recebia. Pouco, mas recebia.",
+        "start": 929,
+        "end": 1109
       },
       {
-        "display": "E o meu sol estava começando a despertar.",
-        "start": 1377,
-        "end": 1539
+        "display": "E aí algo estranho começou a acontecer.",
+        "start": 1109,
+        "end": 1239
+      },
+      {
+        "display": "Sem perceber, eu estava aprendendo como a inteligência artificial pensa por dentro.",
+        "start": 1239,
+        "end": 1487
+      },
+      {
+        "display": "Não como uma especialista. Eu não era.",
+        "start": 1487,
+        "end": 1617
+      },
+      {
+        "display": "Mas como uma aprendiz. Como alguém vendo a máquina respirar pela primeira vez.",
+        "start": 1617,
+        "end": 1837
+      },
+      {
+        "display": "Em Aurora 7, quando você descobre algo novo, o sol brilha um pouco mais forte.",
+        "start": 1837,
+        "end": 2108
+      },
+      {
+        "display": "E, devagarinho, o meu sol estava começando a despertar.",
+        "start": 2108,
+        "end": 2302
+      },
+      {
+        "display": "Eu ainda não sabia. Mas aquilo era só o começo.",
+        "start": 2302,
+        "end": 2501
       }
     ]
   },
   {
     "id": "ato4",
-    "durationInFrames": 1981,
+    "durationInFrames": 2802,
     "lines": [
       {
-        "display": "Mas aí... eu fiz o erro clássico de quem está animado demais.",
+        "display": "Mas aí eu cometi o erro clássico de quem fica animado demais.",
         "start": 0,
-        "end": 210
+        "end": 191
       },
       {
-        "display": "Achei que sabia tudo. Que estava pronta.",
-        "start": 210,
-        "end": 345
+        "display": "Em poucas semanas, eu achei que já sabia tudo.",
+        "start": 191,
+        "end": 353
       },
       {
-        "display": "Vi uma ferramenta chamada Runway. Disseram que dava pra criar vídeos animados com IA.",
-        "start": 345,
-        "end": 597
+        "display": "Achei que estava pronta pra qualquer coisa.",
+        "start": 353,
+        "end": 478
       },
       {
-        "display": "Comprei o plano. R$600. Sem pensar duas vezes.",
-        "start": 597,
-        "end": 793
+        "display": "Foi quando eu vi uma ferramenta chamada Runway.",
+        "start": 478,
+        "end": 614
       },
       {
-        "display": "Tentei. Errei. Tentei de novo. Errei de novo.",
-        "start": 793,
-        "end": 959
+        "display": "Diziam que dava pra criar vídeos animados com inteligência artificial.",
+        "start": 614,
+        "end": 812
       },
       {
-        "display": "A ferramenta era boa. O problema era eu — não sabia ainda como usar.",
-        "start": 959,
-        "end": 1181
+        "display": "Vídeos como os que eu sonhava em fazer.",
+        "start": 812,
+        "end": 926
       },
       {
-        "display": "Em Aurora 7... o sol apagou.",
-        "start": 1181,
+        "display": "Eu nem pensei duas vezes. Comprei o plano na hora.",
+        "start": 926,
+        "end": 1095
+      },
+      {
+        "display": "Seiscentos reais. De uma vez só.",
+        "start": 1095,
+        "end": 1213
+      },
+      {
+        "display": "E aí eu tentei. E errei.",
+        "start": 1213,
         "end": 1307
       },
       {
-        "display": "E eu fiquei no escuro. Com R$600 a menos. E zero resultado.",
+        "display": "Tentei de novo. Errei de novo.",
         "start": 1307,
-        "end": 1538
+        "end": 1418
       },
       {
-        "display": "Aquele momento em que você pensa: talvez não seja pra mim.",
-        "start": 1538,
-        "end": 1731
+        "display": "A ferramenta era boa. O problema... era eu.",
+        "start": 1418,
+        "end": 1581
       },
       {
-        "display": "Talvez eu não seja boa o suficiente.",
-        "start": 1731,
-        "end": 1855
+        "display": "Eu ainda não sabia usar. Não tinha a base.",
+        "start": 1581,
+        "end": 1726
       },
       {
-        "display": "Talvez eu devesse desistir.",
-        "start": 1855,
-        "end": 1981
+        "display": "Em Aurora 7, naquele dia, o sol apagou.",
+        "start": 1726,
+        "end": 1900
+      },
+      {
+        "display": "A cidade inteira ficou no escuro.",
+        "start": 1900,
+        "end": 2011
+      },
+      {
+        "display": "E eu fiquei ali. Sem os seiscentos reais. E sem nenhum resultado.",
+        "start": 2011,
+        "end": 2213
+      },
+      {
+        "display": "Você conhece aquele momento? Aquele pensamento que aperta o peito?",
+        "start": 2213,
+        "end": 2406
+      },
+      {
+        "display": "Talvez isso não seja pra mim. Talvez eu não seja boa o suficiente.",
+        "start": 2406,
+        "end": 2614
+      },
+      {
+        "display": "Talvez... eu devesse simplesmente desistir.",
+        "start": 2614,
+        "end": 2802
       }
     ]
   },
   {
     "id": "ato5",
-    "durationInFrames": 1655,
+    "durationInFrames": 2760,
     "lines": [
       {
-        "display": "Mas sabe o que é engraçado sobre o escuro?",
+        "display": "Mas deixa eu te contar uma coisa engraçada sobre o escuro.",
         "start": 0,
-        "end": 122
+        "end": 163
       },
       {
-        "display": "Ele passa.",
-        "start": 122,
-        "end": 175
+        "display": "O escuro passa. Ele sempre passa.",
+        "start": 163,
+        "end": 284
       },
       {
-        "display": "Resolvi tentar uma última vez. Mas diferente.",
-        "start": 175,
-        "end": 334
+        "display": "Depois de alguns dias parada, eu resolvi tentar uma última vez.",
+        "start": 284,
+        "end": 499
       },
       {
-        "display": "Em vez de gastar dinheiro... fui aprender primeiro.",
-        "start": 334,
-        "end": 495
+        "display": "Mas dessa vez, diferente.",
+        "start": 499,
+        "end": 611
       },
       {
-        "display": "Encontrei o Claude. Uma IA que não só respondia perguntas — me ensinava a pensar.",
-        "start": 495,
-        "end": 754
+        "display": "Em vez de sair gastando dinheiro, eu fui aprender primeiro.",
+        "start": 611,
+        "end": 792
       },
       {
-        "display": "Perguntei tudo. Como criar vídeos. Como usar o Remotion. Como animar personagens.",
-        "start": 754,
-        "end": 1015
+        "display": "E foi aí que eu encontrei o Claude.",
+        "start": 792,
+        "end": 901
       },
       {
-        "display": "E o Claude... respondeu tudo.",
-        "start": 1015,
-        "end": 1125
+        "display": "Uma inteligência artificial que não só respondia as minhas perguntas.",
+        "start": 901,
+        "end": 1085
       },
       {
-        "display": "Em Aurora 7... o sol não volta de repente.",
-        "start": 1125,
-        "end": 1281
+        "display": "Ela me ensinava a pensar. Me explicava o porquê.",
+        "start": 1085,
+        "end": 1241
+      },
+      {
+        "display": "Eu perguntei tudo. Sem vergonha de não saber.",
+        "start": 1241,
+        "end": 1389
+      },
+      {
+        "display": "Como criar um vídeo do zero. Como usar o Remotion.",
+        "start": 1389,
+        "end": 1549
+      },
+      {
+        "display": "Como animar um personagem. Como dar vida a uma cena.",
+        "start": 1549,
+        "end": 1716
+      },
+      {
+        "display": "E o Claude respondia. Com paciência. Quantas vezes fosse preciso.",
+        "start": 1716,
+        "end": 1926
+      },
+      {
+        "display": "Em Aurora 7, o sol não volta de repente.",
+        "start": 1926,
+        "end": 2080
+      },
+      {
+        "display": "Ele não acende a cidade toda de uma vez.",
+        "start": 2080,
+        "end": 2209
       },
       {
         "display": "Ele volta devagar. Uma luz de cada vez.",
-        "start": 1281,
-        "end": 1422
+        "start": 2209,
+        "end": 2350
       },
       {
-        "display": "E cada coisa que eu aprendia... era mais uma luz acendendo.",
-        "start": 1422,
-        "end": 1655
+        "display": "E cada coisinha que eu aprendia... era mais uma janela acendendo.",
+        "start": 2350,
+        "end": 2559
+      },
+      {
+        "display": "Aos poucos, a minha cidade estava voltando a brilhar.",
+        "start": 2559,
+        "end": 2760
       }
     ]
   },
   {
     "id": "ato6",
-    "durationInFrames": 979,
+    "durationInFrames": 1933,
     "lines": [
       {
-        "display": "Foi aí que nasceu a Aurora Labs.",
+        "display": "E foi exatamente aí que nasceu a Aurora Labs.",
         "start": 0,
-        "end": 115
+        "end": 148
       },
       {
-        "display": "Não como um canal de especialistas.",
-        "start": 115,
-        "end": 232
+        "display": "Não como o canal de uma especialista. Porque eu não sou.",
+        "start": 148,
+        "end": 315
       },
       {
-        "display": "Como um diário de uma aprendiz.",
-        "start": 232,
-        "end": 333
+        "display": "Mas como o diário de uma aprendiz.",
+        "start": 315,
+        "end": 425
       },
       {
-        "display": "Eu não sei tudo. Longe disso.",
-        "start": 333,
-        "end": 442
+        "display": "Um lugar pra mostrar o caminho de verdade. Com os erros e tudo.",
+        "start": 425,
+        "end": 616
       },
       {
-        "display": "Mas sei que qualquer pessoa — com curiosidade e coragem — consegue construir algo incrível com IA.",
-        "start": 442,
-        "end": 738
+        "display": "Eu não sei tudo. Longe, muito longe disso.",
+        "start": 616,
+        "end": 780
       },
       {
-        "display": "Você não precisa saber programar.",
-        "start": 738,
-        "end": 848
+        "display": "Mas tem uma coisa que eu aprendi e tenho certeza:",
+        "start": 780,
+        "end": 921
       },
       {
-        "display": "Você precisa querer aprender.",
-        "start": 848,
-        "end": 979
+        "display": "Qualquer pessoa, com curiosidade e com coragem,",
+        "start": 921,
+        "end": 1082
+      },
+      {
+        "display": "consegue construir algo incrível usando inteligência artificial.",
+        "start": 1082,
+        "end": 1263
+      },
+      {
+        "display": "Você não precisa ser gênio. Não precisa de diploma.",
+        "start": 1263,
+        "end": 1430
+      },
+      {
+        "display": "Você não precisa nem saber programar.",
+        "start": 1430,
+        "end": 1549
+      },
+      {
+        "display": "Você só precisa de uma coisa: querer aprender.",
+        "start": 1549,
+        "end": 1700
+      },
+      {
+        "display": "O resto, a gente descobre junto. Uma luz de cada vez.",
+        "start": 1700,
+        "end": 1933
       }
     ]
   },
   {
     "id": "ato7",
-    "durationInFrames": 931,
+    "durationInFrames": 1428,
     "lines": [
       {
-        "display": "Nos próximos episódios vou te mostrar exatamente como fiz tudo isso.",
+        "display": "Nos próximos episódios, eu vou te mostrar exatamente como eu fiz tudo isso.",
         "start": 0,
-        "end": 198
+        "end": 240
       },
       {
-        "display": "As ferramentas que usei. Os erros que cometi. E como você pode fazer também.",
-        "start": 198,
-        "end": 425
+        "display": "As ferramentas que usei. Os erros que cometi, pra você não repetir.",
+        "start": 240,
+        "end": 452
       },
       {
-        "display": "Porque o sol de Aurora 7 brilha pra todo mundo.",
-        "start": 425,
-        "end": 574
+        "display": "E o passo a passo pra você criar também.",
+        "start": 452,
+        "end": 579
       },
       {
-        "display": "Se inscreve. A série continua.",
-        "start": 574,
-        "end": 690
+        "display": "Porque o sol de Aurora 7 não brilha só pra mim.",
+        "start": 579,
+        "end": 723
       },
       {
-        "display": "Eu sou a Lina. E o sol... nunca mais vai apagar.",
-        "start": 690,
-        "end": 899
+        "display": "Ele brilha pra todo mundo que tem coragem de tentar.",
+        "start": 723,
+        "end": 868
+      },
+      {
+        "display": "Se essa história falou com você, se inscreve no canal.",
+        "start": 868,
+        "end": 1045
+      },
+      {
+        "display": "A série está só começando.",
+        "start": 1045,
+        "end": 1146
+      },
+      {
+        "display": "Eu sou a Lina. E o meu sol... o meu sol nunca mais vai apagar.",
+        "start": 1146,
+        "end": 1396
       }
     ]
   }
 ];
 
-export const NARRATION_TOTAL = 10283;
+export const NARRATION_TOTAL = 16086;
