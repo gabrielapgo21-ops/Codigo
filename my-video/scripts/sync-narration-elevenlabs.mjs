@@ -151,7 +151,7 @@ const ACTS = [
 ];
 
 const ff = (args) =>
-  execFileSync('npx', ['remotion', 'ffmpeg', ...args], {
+  execFileSync('ffmpeg', args, {
     stdio: ['ignore', 'ignore', 'inherit'],
   });
 
@@ -189,7 +189,19 @@ actWavs.forEach((w, i) => {
 });
 const listPath = join(TMP, 'list.txt');
 writeFileSync(listPath, order.map((p) => `file '${p}'`).join('\n'));
+// duração total (frames) -> usada para o fade-out final
+const totalFrames =
+  LEAD +
+  actFrames.reduce((x, y) => x + y, 0) +
+  ACT_GAP * (ACTS.length - 1) +
+  TAIL;
+const totalSec = totalFrames / FPS;
+// loudnorm: volume parelho entre os 7 atos; afade: entradas/saídas suaves
 ff(['-y', '-f', 'concat', '-safe', '0', '-i', listPath,
+  '-af',
+  `loudnorm=I=-16:TP=-1.5:LRA=11,` +
+    `afade=t=in:st=0:d=0.5,` +
+    `afade=t=out:st=${(totalSec - 1.1).toFixed(2)}:d=1.0`,
   '-c:a', 'libmp3lame', '-b:a', '192k', '-ar', String(SR),
   join(ROOT, 'public', 'narration_ep2.mp3')]);
 

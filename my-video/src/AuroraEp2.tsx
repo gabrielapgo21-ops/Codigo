@@ -6,6 +6,7 @@ import {
   Loop,
   OffthreadVideo,
   Sequence,
+  Easing,
   interpolate,
   spring,
   staticFile,
@@ -199,8 +200,8 @@ const ShotView: React.FC<{shot: Shot; progress: number; filter: string}> = ({
   progress,
   filter,
 }) => {
-  const scale = 1.05 + progress * 0.1;
-  const driftX = progress * -26;
+  const scale = 1.04 + progress * 0.085;
+  const driftX = progress * -20;
   return (
     <AbsoluteFill
       style={{transform: `scale(${scale}) translateX(${driftX}px)`, filter}}
@@ -364,7 +365,8 @@ const ACTS: ResolvedAct[] = STAGE.map((stage) => {
 // Fundo do ato — tomadas com crossfade
 // ============================================================
 
-const SHOT_FADE = 16;
+const SHOT_FADE = 24;
+const EASE = Easing.inOut(Easing.ease);
 
 const ActBackground: React.FC<{act: ResolvedAct}> = ({act}) => {
   const frame = useCurrentFrame();
@@ -374,8 +376,8 @@ const ActBackground: React.FC<{act: ResolvedAct}> = ({act}) => {
   const slot = act.durationInFrames / shots.length;
 
   const filterBrightness = 0.32 + b * 0.9;
-  const filterSaturate = 0.85 + b * 0.5;
-  const filter = `brightness(${filterBrightness.toFixed(3)}) saturate(${filterSaturate.toFixed(3)})`;
+  const filterSaturate = 0.92 + b * 0.55;
+  const filter = `brightness(${filterBrightness.toFixed(3)}) saturate(${filterSaturate.toFixed(3)}) contrast(1.07)`;
   const darkness = clamp01((0.34 - b) / 0.34);
 
   return (
@@ -391,11 +393,13 @@ const ActBackground: React.FC<{act: ResolvedAct}> = ({act}) => {
           opacity = 1;
         } else if (isFirst) {
           opacity = interpolate(frame, [e - SHOT_FADE, e + SHOT_FADE], [1, 0], {
+            easing: EASE,
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
           });
         } else if (isLast) {
           opacity = interpolate(frame, [s - SHOT_FADE, s + SHOT_FADE], [0, 1], {
+            easing: EASE,
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
           });
@@ -404,12 +408,13 @@ const ActBackground: React.FC<{act: ResolvedAct}> = ({act}) => {
             frame,
             [s - SHOT_FADE, s + SHOT_FADE, e - SHOT_FADE, e + SHOT_FADE],
             [0, 1, 1, 0],
-            {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
+            {easing: EASE, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
           );
         }
         if (opacity <= 0.001) return null;
 
         const progress = interpolate(frame, [s, e], [0, 1], {
+          easing: EASE,
           extrapolateLeft: 'clamp',
           extrapolateRight: 'clamp',
         });
@@ -448,11 +453,13 @@ const ActForeground: React.FC<{act: ResolvedAct}> = ({act}) => {
     {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
   );
 
-  const fadeIn = interpolate(frame, [0, 15], [1, 0], {
+  const fadeIn = interpolate(frame, [0, 22], [1, 0], {
+    easing: EASE,
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  const fadeOut = interpolate(frame, [dur - 22, dur], [0, 1], {
+  const fadeOut = interpolate(frame, [dur - 30, dur], [0, 1], {
+    easing: EASE,
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
