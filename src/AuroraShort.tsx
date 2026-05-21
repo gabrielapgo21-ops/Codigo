@@ -192,13 +192,13 @@ export const AuroraShortPT: React.FC = () => {
           darkTo={0.28}
           media={<VClip src={CLIP('lina_surpresa.mp4')} loopFrames={460} />}
           cards={[
-            {start: 8, segs: [{t: 'Há duas semanas'}]},
+            {start: 8, segs: [{t: 'Two weeks ago'}]},
             {
               start: 78,
               segs: [
-                {t: 'eu não sabia '},
-                {t: 'NADA', c: GOLD},
-                {t: ' sobre IA.'},
+                {t: 'I knew '},
+                {t: 'NOTHING', c: GOLD},
+                {t: ' about AI.'},
               ],
               size: 74,
             },
@@ -217,24 +217,24 @@ export const AuroraShortPT: React.FC = () => {
             {
               start: 10,
               segs: [
-                {t: 'Gastei '},
+                {t: 'I spent '},
                 {t: 'R$600', c: RED},
-                {t: ' numa ferramenta de IA.'},
+                {t: ' on an AI tool.'},
               ],
             },
-            {start: 108, segs: [{t: 'Não funcionou.'}], size: 78},
+            {start: 108, segs: [{t: "It didn't work."}], size: 78},
             {
               start: 182,
               segs: [
-                {t: 'Fiquei sem dinheiro.'},
-                {t: ' E no '},
-                {t: 'escuro', c: RED},
+                {t: 'I was left broke.'},
+                {t: ' And in the '},
+                {t: 'dark', c: RED},
                 {t: '.'},
               ],
             },
             {
               start: 258,
-              segs: [{t: '"Talvez não seja pra mim..."'}],
+              segs: [{t: '"Maybe this isn\'t for me..."'}],
               size: 58,
               dim: true,
             },
@@ -252,28 +252,32 @@ export const AuroraShortPT: React.FC = () => {
           cards={[
             {
               start: 10,
-              segs: [{t: 'Mas o escuro sempre '}, {t: 'passa', c: GOLD}, {t: '.'}],
+              segs: [
+                {t: 'But the dark always '},
+                {t: 'passes', c: GOLD},
+                {t: '.'},
+              ],
             },
             {
               start: 100,
               segs: [
-                {t: 'Em vez de gastar, fui '},
-                {t: 'APRENDER', c: CYAN},
+                {t: 'Instead of spending, I went to '},
+                {t: 'LEARN', c: CYAN},
                 {t: '.'},
               ],
             },
             {
               start: 192,
-              segs: [{t: 'Encontrei o '}, {t: 'Claude', c: CYAN}, {t: '.'}],
+              segs: [{t: 'I found '}, {t: 'Claude', c: CYAN}, {t: '.'}],
               size: 78,
             },
             {
               start: 270,
               segs: [
-                {t: 'Cada coisa que eu aprendia,'},
-                {t: ' uma '},
-                {t: 'luz', c: GOLD},
-                {t: ' acendendo.'},
+                {t: 'Each thing I learned,'},
+                {t: ' a '},
+                {t: 'light', c: GOLD},
+                {t: ' turning on.'},
               ],
             },
           ]}
@@ -291,17 +295,17 @@ export const AuroraShortPT: React.FC = () => {
             {
               start: 10,
               segs: [
-                {t: 'Hoje eu tenho uma '},
-                {t: 'série animada', c: GOLD},
+                {t: 'Today I have an '},
+                {t: 'animated series', c: GOLD},
                 {t: '.'},
               ],
             },
-            {start: 92, segs: [{t: 'Criada com IA. Do zero.'}]},
+            {start: 92, segs: [{t: 'Made with AI. From scratch.'}]},
             {
               start: 150,
               segs: [
-                {t: 'Você só precisa '},
-                {t: 'querer aprender', c: GOLD},
+                {t: 'You just need to '},
+                {t: 'want to learn', c: GOLD},
                 {t: '.'},
               ],
             },
@@ -317,13 +321,13 @@ export const AuroraShortPT: React.FC = () => {
           darkTo={0.32}
           media={<VClip src={CLIP('lina_falando.mp4')} loopFrames={232} />}
           cards={[
-            {start: 6, segs: [{t: 'Eu sou a Lina.'}], size: 70},
+            {start: 6, segs: [{t: "I'm Lina."}], size: 70},
             {
               start: 52,
               segs: [
-                {t: 'E o meu sol nunca mais vai '},
-                {t: 'apagar', c: GOLD},
-                {t: '.'},
+                {t: 'And my sun will never '},
+                {t: 'go out', c: GOLD},
+                {t: ' again.'},
               ],
             },
           ]}
@@ -373,7 +377,7 @@ const CtaTag: React.FC = () => {
           textShadow: '0 2px 8px #000',
         }}
       >
-        Inscreva-se · a série já começou ☀️
+        Subscribe · the series has begun ☀️
       </div>
     </div>
   );
