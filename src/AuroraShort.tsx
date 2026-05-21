@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AbsoluteFill,
+  Audio,
   Img,
   Loop,
   OffthreadVideo,
@@ -184,6 +185,13 @@ const Beat: React.FC<{
 export const AuroraShortPT: React.FC = () => {
   return (
     <AbsoluteFill style={{backgroundColor: '#000'}}>
+      {/* Música de fundo — mesma trilha do AuroraLabsEp1 */}
+      <Audio
+        src={staticFile('leberch-chase-254539.mp3')}
+        volume={(f) =>
+          interpolate(f, [0, 24, 1130, 1200], [0, 0.7, 0.7, 0], clamp)
+        }
+      />
       {/* A — Gancho (0-180) */}
       <Sequence from={0} durationInFrames={180}>
         <Beat
