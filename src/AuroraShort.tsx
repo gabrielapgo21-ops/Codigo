@@ -3,7 +3,6 @@ import {
   AbsoluteFill,
   Audio,
   Img,
-  Loop,
   OffthreadVideo,
   Sequence,
   interpolate,
@@ -23,16 +22,14 @@ const WHITE = '#FFFFFF';
 const FONT = '-apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
 const EASE = Easing.inOut(Easing.ease);
 
-const CLIP = (name: string) => staticFile(`images/Aurora Labs/${name}`);
+// Clipes sem áudio (em public/short/) — evita qualquer vazamento de som.
+const CLIP = (name: string) => staticFile(`short/${name}`);
 
 const clamp = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
 
-// ── Mídia: vídeo (loop, câmera lenta, recorte vertical) ──────────────────────
+// ── Mídia: vídeo (câmera lenta cobrindo a cena, sem loop) ────────────────────
 
-const VClip: React.FC<{src: string; loopFrames: number}> = ({
-  src,
-  loopFrames,
-}) => {
+const VClip: React.FC<{src: string; rate: number}> = ({src, rate}) => {
   const frame = useCurrentFrame();
   const scale = interpolate(frame, [0, 360], [1.12, 1.22], {
     ...clamp,
@@ -40,14 +37,12 @@ const VClip: React.FC<{src: string; loopFrames: number}> = ({
   });
   return (
     <AbsoluteFill style={{transform: `scale(${scale})`}}>
-      <Loop durationInFrames={loopFrames}>
-        <OffthreadVideo
-          src={src}
-          playbackRate={0.65}
-          muted
-          style={{width: '100%', height: '100%', objectFit: 'cover'}}
-        />
-      </Loop>
+      <OffthreadVideo
+        src={src}
+        playbackRate={rate}
+        muted
+        style={{width: '100%', height: '100%', objectFit: 'cover'}}
+      />
     </AbsoluteFill>
   );
 };
@@ -198,7 +193,7 @@ export const AuroraShortPT: React.FC = () => {
           durationInFrames={180}
           darkFrom={0.34}
           darkTo={0.28}
-          media={<VClip src={CLIP('lina_surpresa.mp4')} loopFrames={460} />}
+          media={<VClip src={CLIP('lina_surpresa.mp4')} rate={0.7} />}
           cards={[
             {start: 8, segs: [{t: 'Two weeks ago'}]},
             {
@@ -256,7 +251,7 @@ export const AuroraShortPT: React.FC = () => {
           durationInFrames={360}
           darkFrom={0.72}
           darkTo={0.24}
-          media={<VClip src={CLIP('lina_bento.mp4')} loopFrames={232} />}
+          media={<VClip src={CLIP('lina_bento.mp4')} rate={0.4} />}
           cards={[
             {
               start: 10,
@@ -298,7 +293,7 @@ export const AuroraShortPT: React.FC = () => {
           durationInFrames={210}
           darkFrom={0.26}
           darkTo={0.2}
-          media={<VClip src={CLIP('lina_vitoria.mp4')} loopFrames={232} />}
+          media={<VClip src={CLIP('lina_vitoria.mp4')} rate={0.65} />}
           cards={[
             {
               start: 10,
@@ -327,7 +322,7 @@ export const AuroraShortPT: React.FC = () => {
           durationInFrames={120}
           darkFrom={0.24}
           darkTo={0.32}
-          media={<VClip src={CLIP('lina_falando.mp4')} loopFrames={232} />}
+          media={<VClip src={CLIP('lina_falando.mp4')} rate={0.65} />}
           cards={[
             {start: 6, segs: [{t: "I'm Lina."}], size: 70},
             {
