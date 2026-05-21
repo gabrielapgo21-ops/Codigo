@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   AbsoluteFill,
-  Audio,
   Img,
   Loop,
   Sequence,
@@ -277,10 +276,39 @@ const VideoSegment: React.FC<{
     opacity = 1;
   }
 
+  // Áudio: o próprio vídeo carrega o som (fonte única — sem eco).
+  // O volume faz crossfade nas mesmas regiões do crossfade visual.
+  const volume = (f: number) => {
+    let v = 1;
+    if (fadeIn) {
+      v = Math.min(
+        v,
+        interpolate(f, [0, CROSSFADE], [0, 1], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        })
+      );
+    }
+    if (fadeOut) {
+      v = Math.min(
+        v,
+        interpolate(f, [durationInFrames - CROSSFADE, durationInFrames], [1, 0], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        })
+      );
+    }
+    return v;
+  };
+
   return (
     <AbsoluteFill style={{ opacity }}>
       <div style={{ width: '100%', height: '100%', filter: LOOK }}>
-        <OffthreadVideo src={src} muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <OffthreadVideo
+          src={src}
+          volume={volume}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </div>
     </AbsoluteFill>
   );
@@ -448,9 +476,9 @@ export const AuroraLabsEp2PT: React.FC<AuroraLabsEp2Props> = ({ d1, d2, d3 }) =>
     <AbsoluteFill style={{ backgroundColor: '#000' }}>
       <SharpenDef />
 
-      {/* ── Talking-head layer ── */}
+      {/* ── Talking-head layer (cada vídeo carrega o próprio áudio) ── */}
 
-      {/* V1: visual fades out over 30f, audio cuts dry at frame d1-CROSSFADE */}
+      {/* V1 */}
       <Sequence from={0} durationInFrames={d1}>
         <VideoSegment
           src={staticFile('Lina_fala_ato1_ato2_ato3.mp4')}
@@ -458,10 +486,9 @@ export const AuroraLabsEp2PT: React.FC<AuroraLabsEp2Props> = ({ d1, d2, d3 }) =>
           fadeIn={false}
           fadeOut={true}
         />
-        <Audio src={staticFile('Lina_fala_ato1_ato2_ato3.mp4')} trimAfter={d1 - CROSSFADE} />
       </Sequence>
 
-      {/* V2: visual crossfades both ends, audio starts dry when V1 audio cuts */}
+      {/* V2 */}
       <Sequence from={v2Start} durationInFrames={d2}>
         <VideoSegment
           src={staticFile('Lina_fala_ato456.mp4')}
@@ -469,12 +496,9 @@ export const AuroraLabsEp2PT: React.FC<AuroraLabsEp2Props> = ({ d1, d2, d3 }) =>
           fadeIn={true}
           fadeOut={true}
         />
-        <Sequence from={0} durationInFrames={d2 - CROSSFADE}>
-          <Audio src={staticFile('Lina_fala_ato456.mp4')} />
-        </Sequence>
       </Sequence>
 
-      {/* V3: visual fades in over 30f, audio starts dry when V2 audio cuts */}
+      {/* V3 */}
       <Sequence from={v3Start} durationInFrames={d3}>
         <VideoSegment
           src={staticFile('Lina_fala_ato7.mp4')}
@@ -482,7 +506,6 @@ export const AuroraLabsEp2PT: React.FC<AuroraLabsEp2Props> = ({ d1, d2, d3 }) =>
           fadeIn={true}
           fadeOut={false}
         />
-        <Audio src={staticFile('Lina_fala_ato7.mp4')} />
       </Sequence>
 
       {/* ── B-roll overlay layer (above talking-heads, no audio) ── */}
