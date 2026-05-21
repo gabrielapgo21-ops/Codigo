@@ -1,0 +1,93 @@
+I have 8 pasta factory images already generated at:
+/workspace/output/pasta_factory_v2_img1.png
+/workspace/output/pasta_factory_v2_img2.png
+/workspace/output/pasta_factory_v2_img3.png
+/workspace/output/pasta_factory_v2_img4.png
+/workspace/output/pasta_factory_v2_img5.png
+/workspace/output/pasta_factory_v2_img6.png
+/workspace/output/pasta_factory_v2_img7.png
+/workspace/output/pasta_factory_v2_img8.png
+
+Create a complete Remotion video project using these images.
+
+PROJECT SETUP:
+- Copy all images to: slowmade-pasta/public/images/
+- Project folder: Desktop/slowmade-pasta
+- Duration: 10 minutes (18000 frames at 30fps)
+- Resolution: 1920x1080
+
+ANIMATE EACH IMAGE:
+
+Image 1 — Wheat (0:00 to 1:15 — frames 0-2250)
+- Slow zoom in: scale 1.0 to 1.15
+- Fade in from black first 2 seconds
+- Floating golden particles overlay
+- Warm color grade filter
+
+Image 2 — Flour (1:15 to 2:30 — frames 2250-4500)
+- Slow pan left to right: translateX 0 to -80px
+- Fine dust particles floating upward
+- Bright warm light
+
+Image 3 — Mixing (2:30 to 3:45 — frames 4500-6750)
+- Slow zoom in: scale 1.0 to 1.12
+- Subtle pulse effect
+- Warm golden overlay 15% opacity
+
+Image 4 — Pasta Die (3:45 to 5:30 — frames 6750-9900)
+- HERO SCENE — most satisfying
+- Very slow extreme zoom in: scale 1.0 to 1.25
+- Falling cream pasta strands particle effect
+- Soft warm glow effect
+
+Image 5 — Drying Racks (5:30 to 6:45 — frames 9900-12150)
+- Slow pan right to left: translateX 0 to 80px
+- Reveal full symmetry of drying racks
+- Gentle warm amber light flicker
+
+Image 6 — Tunnel (6:45 to 7:45 — frames 12150-13950)
+- Slow push forward: scale 1.0 to 1.20
+- Deep perspective zoom into tunnel
+- Warm haze overlay effect
+
+Image 7 — Packaging (7:45 to 9:00 — frames 13950-16200)
+- Energetic zoom pulses
+- Scale alternates 1.0 to 1.08 rhythmically
+- More dynamic than other scenes
+
+Image 8 — Sunset (9:00 to 10:00 — frames 16200-18000)
+- Slow zoom out: scale 1.15 to 1.0
+- Golden color grade intensifies
+- Fade to warm golden at the very end
+
+TRANSITIONS:
+- Crossfade between ALL scenes: 30 frames (1 second)
+- Use interpolate() with easeInOut
+
+AUDIO:
+- Download a free lo-fi track from:
+  https://mixkit.co/free-music/
+- Or create a simple lo-fi audio placeholder
+- Add to: slowmade-pasta/public/audio/lofi.mp3
+- Volume: 0.7
+
+GLOBAL EFFECTS FOR ALL SCENES:
+- Ken Burns effect on every image
+- All animations use Easing.easeInOut
+- Smooth and relaxing feeling throughout
+- Warm color temperature on everything
+
+CREATE THESE FILES:
+- src/Root.tsx
+- src/compositions/PastaFactory.tsx
+- src/scenes/Scene1.tsx through Scene8.tsx
+- src/effects/Particles.tsx
+- src/effects/KenBurns.tsx
+- src/effects/ColorGrade.tsx
+- package.json with all dependencies
+
+Then run:
+npm install
+npx remotion studio
+
+Show me preview when ready.
