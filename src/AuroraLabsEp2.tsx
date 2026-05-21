@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   AbsoluteFill,
-  Html5Audio,
+  Audio,
   Img,
   Loop,
   Sequence,
@@ -458,7 +458,7 @@ export const AuroraLabsEp2PT: React.FC<AuroraLabsEp2Props> = ({ d1, d2, d3 }) =>
           fadeIn={false}
           fadeOut={true}
         />
-        <Html5Audio src={staticFile('Lina_fala_ato1_ato2_ato3.mp4')} trimAfter={d1 - CROSSFADE} />
+        <Audio src={staticFile('Lina_fala_ato1_ato2_ato3.mp4')} trimAfter={d1 - CROSSFADE} />
       </Sequence>
 
       {/* V2: visual crossfades both ends, audio starts dry when V1 audio cuts */}
@@ -470,7 +470,7 @@ export const AuroraLabsEp2PT: React.FC<AuroraLabsEp2Props> = ({ d1, d2, d3 }) =>
           fadeOut={true}
         />
         <Sequence from={0} durationInFrames={d2 - CROSSFADE}>
-          <Html5Audio src={staticFile('Lina_fala_ato456.mp4')} />
+          <Audio src={staticFile('Lina_fala_ato456.mp4')} />
         </Sequence>
       </Sequence>
 
@@ -482,7 +482,7 @@ export const AuroraLabsEp2PT: React.FC<AuroraLabsEp2Props> = ({ d1, d2, d3 }) =>
           fadeIn={true}
           fadeOut={false}
         />
-        <Html5Audio src={staticFile('Lina_fala_ato7.mp4')} />
+        <Audio src={staticFile('Lina_fala_ato7.mp4')} />
       </Sequence>
 
       {/* ── B-roll overlay layer (above talking-heads, no audio) ── */}
