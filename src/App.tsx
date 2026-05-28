@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Sparkles, Wand2, Loader2 } from 'lucide-react';
-import { AspectRatio, GenerationRecord, GenerationStatus, SourceImage } from './types';
+import { AspectRatio, GenerationRecord, GenerationStatus, MotionId, SourceImage } from './types';
 import ImageUploader from './components/ImageUploader';
-import PromptInput from './components/PromptInput';
-import VideoPreview from './components/VideoPreview';
+import MotionControls from './components/MotionControls';
+import VideoStage from './components/VideoStage';
 import Gallery from './components/Gallery';
-import { generateVideoFromImage } from './services/veoService';
+import { renderMotionVideo } from './services/motionRenderer';
 import { saveGeneration } from './services/galleryStore';
 
 function randomId() {
@@ -14,13 +14,15 @@ function randomId() {
 
 export default function App() {
   const [image, setImage] = useState<SourceImage | null>(null);
-  const [prompt, setPrompt] = useState('');
-  const [negativePrompt, setNegativePrompt] = useState('');
+  const [motion, setMotion] = useState<MotionId>('ken-burns');
+  const [durationSeconds, setDurationSeconds] = useState(5);
+  const [intensity, setIntensity] = useState(0.8);
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('16:9');
-  const [model, setModel] = useState('veo-3.1-generate-preview');
+  const [vignette, setVignette] = useState(true);
+  const [grain, setGrain] = useState(false);
 
   const [status, setStatus] = useState<GenerationStatus>('idle');
-  const [statusMessage, setStatusMessage] = useState<string | undefined>();
+  const [progress, setProgress] = useState(0);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [galleryKey, setGalleryKey] = useState(0);
@@ -33,30 +35,35 @@ export default function App() {
     };
   }, [videoUrl]);
 
-  const busy =
-    status === 'queued' || status === 'rendering' || status === 'downloading';
+  const busy = status === 'rendering' || status === 'encoding';
+  const canRender = !!image && !busy;
 
-  const handleGenerate = async () => {
-    if (!image || !prompt.trim() || busy) return;
+  const handleRender = async () => {
+    if (!image || busy) return;
     setErrorMessage(null);
     if (videoUrl) URL.revokeObjectURL(videoUrl);
     setVideoUrl(null);
-    setStatus('queued');
-    setStatusMessage('Preparing request...');
+    setStatus('rendering');
+    setProgress(0);
 
     try {
-      const blob = await generateVideoFromImage(
+      const blob = await renderMotionVideo(
         image,
         {
-          prompt: prompt.trim(),
-          negativePrompt: negativePrompt.trim() || undefined,
+          motion,
+          durationSeconds,
           aspectRatio,
-          model,
+          fps: 30,
+          intensity,
+          vignette,
+          grain,
         },
         {
-          onStatus: (s, msg) => {
-            setStatus(s);
-            setStatusMessage(msg);
+          onProgress: (p) => {
+            setProgress(p.frame / p.totalFrames);
+            if (p.phase === 'encoding' && status !== 'encoding') {
+              setStatus('encoding');
+            }
           },
         },
       );
@@ -64,29 +71,26 @@ export default function App() {
       const url = URL.createObjectURL(blob);
       setVideoUrl(url);
       setStatus('done');
-      setStatusMessage(undefined);
+      setProgress(1);
 
       const record: GenerationRecord = {
         id: randomId(),
         createdAt: Date.now(),
-        prompt: prompt.trim(),
-        negativePrompt: negativePrompt.trim() || undefined,
+        motion,
+        durationSeconds,
         aspectRatio,
-        model,
+        intensity,
         thumbnailDataUrl: image.dataUrl,
-        videoMimeType: blob.type || 'video/mp4',
+        videoMimeType: blob.type || 'video/webm',
       };
       await saveGeneration(record, blob);
       setGalleryKey((k) => k + 1);
     } catch (e: any) {
       console.error(e);
       setStatus('error');
-      setStatusMessage(undefined);
-      setErrorMessage(e?.message ?? 'Something went wrong while generating the video.');
+      setErrorMessage(e?.message ?? 'Could not render the animation.');
     }
   };
-
-  const canGenerate = !!image && prompt.trim().length > 0 && !busy;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 text-zinc-100">
@@ -101,18 +105,14 @@ export default function App() {
                 Códigø <span className="text-violet-400">Animate</span>
               </h1>
               <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-none mt-1">
-                Image → Video · powered by Veo
+                Image → Video · runs in your browser · 100% free
               </p>
             </div>
           </div>
-          <a
-            href="https://ai.google.dev/gemini-api/docs/video"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden md:inline-flex text-xs text-zinc-500 hover:text-zinc-300"
-          >
-            About Veo →
-          </a>
+          <span className="hidden md:inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded-full px-3 py-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            No API · No login
+          </span>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -124,7 +124,7 @@ export default function App() {
                 </h2>
                 {image && (
                   <span className="text-[10px] text-zinc-500 font-mono">
-                    {(image.base64.length * 0.75 / 1024).toFixed(0)} KB
+                    {image.width}×{image.height}
                   </span>
                 )}
               </div>
@@ -133,31 +133,37 @@ export default function App() {
 
             <div className="rounded-3xl bg-zinc-900/40 border border-zinc-800 p-5 md:p-6 space-y-5">
               <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-400">
-                2 · Motion direction
+                2 · Motion
               </h2>
-              <PromptInput
-                prompt={prompt}
-                onPromptChange={setPrompt}
-                negativePrompt={negativePrompt}
-                onNegativePromptChange={setNegativePrompt}
+              <MotionControls
+                motion={motion}
+                onMotionChange={setMotion}
+                durationSeconds={durationSeconds}
+                onDurationChange={setDurationSeconds}
+                intensity={intensity}
+                onIntensityChange={setIntensity}
                 aspectRatio={aspectRatio}
                 onAspectRatioChange={setAspectRatio}
-                model={model}
-                onModelChange={setModel}
+                vignette={vignette}
+                onVignetteChange={setVignette}
+                grain={grain}
+                onGrainChange={setGrain}
                 disabled={busy}
               />
             </div>
 
             <button
               type="button"
-              onClick={handleGenerate}
-              disabled={!canGenerate}
+              onClick={handleRender}
+              disabled={!canRender}
               className="w-full py-4 rounded-2xl font-bold text-sm tracking-wide flex items-center justify-center gap-2 transition-all bg-gradient-to-r from-violet-600 via-fuchsia-600 to-rose-500 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
             >
               {busy ? (
                 <>
                   <Loader2 size={18} className="animate-spin" />
-                  {statusMessage ?? 'Rendering...'}
+                  {status === 'encoding'
+                    ? 'Encoding...'
+                    : `Rendering... ${Math.round(progress * 100)}%`}
                 </>
               ) : (
                 <>
@@ -173,9 +179,9 @@ export default function App() {
               <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-400">
                 3 · Result
               </h2>
-              <VideoPreview
+              <VideoStage
                 status={status}
-                statusMessage={statusMessage}
+                progress={progress}
                 videoUrl={videoUrl}
                 errorMessage={errorMessage}
               />
@@ -196,7 +202,7 @@ export default function App() {
         </div>
 
         <footer className="mt-10 text-center text-[11px] text-zinc-600">
-          Generations use your <span className="font-mono">GEMINI_API_KEY</span>. Costs apply.
+          Everything runs in your browser — no servers, no API keys, no cost.
         </footer>
       </div>
     </div>
