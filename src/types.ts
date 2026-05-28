@@ -1,13 +1,6 @@
 export type AspectRatio = '16:9' | '9:16' | '1:1';
 
-export type GenerationStatus =
-  | 'idle'
-  | 'uploading'
-  | 'queued'
-  | 'rendering'
-  | 'downloading'
-  | 'done'
-  | 'error';
+export type GenerationStatus = 'idle' | 'rendering' | 'encoding' | 'done' | 'error';
 
 export interface SourceImage {
   base64: string;
@@ -18,27 +11,40 @@ export interface SourceImage {
   name: string;
 }
 
-export interface GenerationOptions {
-  prompt: string;
-  negativePrompt?: string;
+export type MotionId =
+  | 'zoom-in'
+  | 'zoom-out'
+  | 'pan-left'
+  | 'pan-right'
+  | 'ken-burns'
+  | 'orbit'
+  | 'dolly-in'
+  | 'sway';
+
+export interface MotionPreset {
+  id: MotionId;
+  label: string;
+  emoji: string;
+  description: string;
+}
+
+export interface RenderOptions {
+  motion: MotionId;
+  durationSeconds: number;
   aspectRatio: AspectRatio;
-  model: string;
+  fps: number;
+  intensity: number;
+  vignette: boolean;
+  grain: boolean;
 }
 
 export interface GenerationRecord {
   id: string;
   createdAt: number;
-  prompt: string;
-  negativePrompt?: string;
+  motion: MotionId;
+  durationSeconds: number;
   aspectRatio: AspectRatio;
-  model: string;
+  intensity: number;
   thumbnailDataUrl: string;
   videoMimeType: string;
-}
-
-export interface MotionPreset {
-  id: string;
-  label: string;
-  emoji: string;
-  prompt: string;
 }
