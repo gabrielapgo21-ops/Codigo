@@ -1,29 +1,44 @@
-export type Frequency = 'daily' | 'weekly' | 'monthly' | 'occasionally';
+export type AspectRatio = '16:9' | '9:16' | '1:1';
 
-export interface WorkTask {
+export type GenerationStatus =
+  | 'idle'
+  | 'uploading'
+  | 'queued'
+  | 'rendering'
+  | 'downloading'
+  | 'done'
+  | 'error';
+
+export interface SourceImage {
+  base64: string;
+  mimeType: string;
+  dataUrl: string;
+  width: number;
+  height: number;
+  name: string;
+}
+
+export interface GenerationOptions {
+  prompt: string;
+  negativePrompt?: string;
+  aspectRatio: AspectRatio;
+  model: string;
+}
+
+export interface GenerationRecord {
   id: string;
-  title: string;
-  description: string;
-  hoursPerWeek: number;
-  frequency: Frequency;
-  repetitiveness: number; // 0 to 1
+  createdAt: number;
+  prompt: string;
+  negativePrompt?: string;
+  aspectRatio: AspectRatio;
+  model: string;
+  thumbnailDataUrl: string;
+  videoMimeType: string;
 }
 
-export interface TaskAnalysis {
-  taskId: string;
-  automationScore: number; // 0 to 100
-  reasoning: string;
-  suggestedPrompt: string;
-  automationTool: string;
-  savingsEstimate: string;
-}
-
-export interface UserGoals {
-  mainGoal: string;
-  focusArea: string;
-}
-
-export interface DashboardData {
-  tasks: WorkTask[];
-  analyses: Record<string, TaskAnalysis>;
+export interface MotionPreset {
+  id: string;
+  label: string;
+  emoji: string;
+  prompt: string;
 }
