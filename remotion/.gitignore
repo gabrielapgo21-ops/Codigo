@@ -1,0 +1,13 @@
+node_modules/
+out/
+.remotion/
+*.log
+
+# Generated / swappable media — regenerate with `npm run placeholders`,
+# or drop in your real files (see README). Not tracked in git.
+public/audio/*
+public/imagens/*
+public/music/*
+public/sfx/*
+public/*.srt
+!public/**/.gitkeep

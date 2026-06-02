@@ -1,0 +1,28 @@
+{
+  "name": "video-bilionario-remotion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cinematic 5-minute mystery/finance video assembled with Remotion (VideoBilionario).",
+  "scripts": {
+    "dev": "remotion studio",
+    "studio": "remotion studio",
+    "render": "remotion render VideoBilionario out/VIDEO01_REMOTION.mp4 --codec=h264 --crf=18",
+    "render:proof": "remotion render VideoBilionario out/PROOF.mp4 --codec=h264 --crf=23 --scale=0.5",
+    "still": "remotion still VideoBilionario out/frame.png --frame=900",
+    "placeholders": "node scripts/gen-placeholders.mjs && node scripts/gen-audio.mjs",
+    "upgrade": "remotion upgrade",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.471",
+    "@remotion/transitions": "4.0.471",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.471"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "^0.1.65",
+    "@types/react": "19.0.0",
+    "typescript": "5.8.2"
+  }
+}
