@@ -1,0 +1,22 @@
+# Hostinger / Apache / LiteSpeed static hosting config for Códigø Animate
+# Ensures the SPA is served correctly and avoids "403 Forbidden" when the
+# server cannot find a directory index.
+
+DirectoryIndex index.html
+
+# Serve correct MIME types for ES modules and styles
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+</IfModule>
+
+# Single Page App fallback: route everything that is not a real file
+# or directory back to index.html so deep links don't 404.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
