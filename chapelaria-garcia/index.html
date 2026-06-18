@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapelaria Garcia — Comercial Country Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0d0a07; --panel:#171210; --line:#2a211a;
+    --gold:#e3a857; --gold-soft:#f0c987; --cream:#f3e7d3;
+    --leather:#8a4b22; --muted:#9a8a76;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:
+      radial-gradient(1200px 700px at 50% -10%, #20160e 0%, transparent 60%),
+      linear-gradient(180deg,#0d0a07,#070504);
+    color:var(--cream);
+    font-family:'Oswald',system-ui,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100%;
+    display:flex; flex-direction:column; align-items:center;
+    padding:28px 16px 60px;
+  }
+  header{text-align:center;margin-bottom:18px}
+  header .kicker{
+    font-size:11px;letter-spacing:.42em;text-transform:uppercase;
+    color:var(--gold);font-weight:600;margin:0 0 6px
+  }
+  header h1{
+    font-family:'Cinzel',Georgia,serif;font-weight:900;
+    font-size:clamp(22px,4vw,34px);margin:0;letter-spacing:.06em;
+    background:linear-gradient(180deg,#fff,#e3a857);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  header p{color:var(--muted);font-size:12.5px;margin:8px 0 0;max-width:560px}
+  .layout{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;align-items:flex-start;width:100%;max-width:980px}
+  .stage{position:relative}
+  canvas#preview{
+    width:min(360px,86vw);height:auto;aspect-ratio:9/16;
+    border-radius:18px;background:#000;display:block;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.8),0 0 0 1px var(--line),0 0 0 6px #0c0907;
+  }
+  .badge{
+    position:absolute;top:12px;left:12px;z-index:2;
+    background:rgba(12,9,7,.6);backdrop-filter:blur(6px);
+    border:1px solid var(--line);border-radius:999px;
+    padding:5px 11px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft)
+  }
+  .panel{
+    background:var(--panel);border:1px solid var(--line);border-radius:18px;
+    padding:20px;width:min(380px,90vw);
+  }
+  .panel h2{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 14px;color:var(--gold-soft)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  button{
+    font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.06em;
+    border:1px solid var(--line);background:#1f1813;color:var(--cream);
+    padding:11px 14px;border-radius:11px;cursor:pointer;font-size:13px;flex:1;
+    transition:.2s;text-transform:uppercase
+  }
+  button:hover{border-color:var(--gold);color:#fff}
+  button.primary{
+    background:linear-gradient(135deg,#e3a857,#a8631f);border-color:#e3a857;color:#1a0f06;font-weight:700
+  }
+  button.primary:hover{filter:brightness(1.08)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .drop{
+    border:1.5px dashed #3a2c20;border-radius:13px;padding:18px;text-align:center;
+    color:var(--muted);font-size:12.5px;cursor:pointer;transition:.2s;line-height:1.5
+  }
+  .drop:hover,.drop.over{border-color:var(--gold);color:var(--cream);background:#1c1510}
+  .drop b{color:var(--gold-soft)}
+  .hint{font-size:11.5px;color:var(--muted);line-height:1.6;margin:12px 0 0}
+  .hint code{color:var(--gold-soft);font-family:ui-monospace,monospace}
+  .status{font-size:12px;color:var(--gold-soft);min-height:18px;margin-top:10px;letter-spacing:.04em}
+  .field{margin-bottom:14px}
+  .field label{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+  input[type=range]{width:100%;accent-color:var(--gold)}
+  input[type=text]{width:100%;background:#120d0a;border:1px solid var(--line);color:var(--cream);border-radius:9px;padding:9px 11px;font-family:'Oswald';font-size:13px}
+  footer{margin-top:30px;color:#5b4f43;font-size:11px;text-align:center}
+</style>
+</head>
+<body>
+  <header>
+    <p class="kicker">Comercial Country Premium · 9:16</p>
+    <h1>CHAPELARIA GARCIA</h1>
+    <p>Vídeo comercial gerado 100% por código (Canvas + MediaRecorder). O produto é sempre o protagonista — encaixe "contain", nunca distorcido, nunca coberto. Carregue a foto do seu produto e renderize.</p>
+  </header>
+
+  <div class="layout">
+    <div class="stage">
+      <span class="badge" id="badge">● Prévia ao vivo</span>
+      <canvas id="preview" width="1080" height="1920"></canvas>
+    </div>
+
+    <div class="panel">
+      <h2>Produto</h2>
+      <div class="drop" id="drop">
+        <b>Arraste a foto do produto aqui</b><br />ou clique para escolher · PNG com fundo transparente fica perfeito
+      </div>
+      <input type="file" id="file" accept="image/*" hidden />
+      <p class="hint">Sem foto? A prévia já roda com um chapéu de couro desenhado por código como espaço reservado. Para usar o produto real, basta soltar a imagem aqui (ela vira o protagonista, com sombra, luz de recorte e brilho — sem alterar a cor real).</p>
+
+      <h2 style="margin-top:22px">Texto da marca</h2>
+      <div class="field">
+        <label>Assinatura / chamada</label>
+        <input type="text" id="tagline" value="Vista o espírito country" />
+      </div>
+
+      <div class="field">
+        <label><span>Duração</span><span id="durVal">12s</span></label>
+        <input type="range" id="dur" min="8" max="15" step="1" value="12" />
+      </div>
+
+      <h2 style="margin-top:8px">Render</h2>
+      <div class="row">
+        <button id="playBtn">⏸ Pausar prévia</button>
+        <button id="restartBtn">↺ Reiniciar</button>
+      </div>
+      <div class="row">
+        <button class="primary" id="recBtn">● Renderizar &amp; Baixar Vídeo</button>
+      </div>
+      <div class="status" id="status">Pronto. A prévia está rodando em loop.</div>
+      <p class="hint">O vídeo é gravado em tempo real no navegador: <code>.mp4</code> quando suportado, senão <code>.webm</code>. Durante a gravação a prévia roda uma vez do início ao fim.</p>
+    </div>
+  </div>
+
+  <footer>Chapelaria Garcia · Tradição, atitude e presença — gerado por código, sem servidores.</footer>
+
+<script>
+/* ============================================================================
+   CHAPELARIA GARCIA — Diretor de comercial em Canvas 2D
+   - Timeline determinística: renderFrame(t) é função pura do tempo (segundos)
+   - Produto SEMPRE dentro de uma "safe box" central, encaixe contain (Regra 1)
+   - Grade de cor / poeira / luz só no FUNDO; produto recebe realce sutil (Regra 2)
+============================================================================ */
+const cv = document.getElementById('preview');
+const ctx = cv.getContext('2d');
+const W = cv.width, H = cv.height;       // 1080 x 1920
+let DURATION = 12;                        // segundos
+const FPS = 30;
+
+const statusEl = document.getElementById('status');
+const badgeEl  = document.getElementById('badge');
+
+/* ---------- Utilidades ---------- */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const smooth=t=>t*t*(3-2*t);
+const easeOut=t=>1-Math.pow(1-t,3);
+const easeInOut=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+// progresso suave dentro de uma janela [a,b]
+const seg=(t,a,b)=>clamp((t-a)/(b-a),0,1);
+// aparece e some (fade in/out) dentro de uma janela
+function window01(t,a,b,fin=.4,fout=.4){
+  if(t<a||t>b) return 0;
+  const u=(t-a)/(b-a);
+  return Math.min(smooth(clamp(u/fin,0,1)), smooth(clamp((1-u)/fout,0,1)));
+}
+
+/* ---------- RNG semeado (poeira estável) ---------- */
+function mulberry32(seed){return function(){let z=(seed+=0x6D2B79F5);z=Math.imul(z^z>>>15,z|1);z^=z+Math.imul(z^z>>>7,z|61);return((z^z>>>14)>>>0)/4294967296;}}
+const rnd=mulberry32(20240618);
+const DUST=Array.from({length:90},()=>({
+  x:rnd(),y:rnd(),r:rnd()*2.6+0.6,
+  sp:rnd()*0.4+0.08, drift:(rnd()-0.5)*0.5,
+  ph:rnd()*Math.PI*2, depth:rnd()  // depth<.45 => atrás do produto
+}));
+
+/* ---------- Produto ---------- */
+let productImg=null;            // Image do usuário (opcional)
+let productEnhanced=null;       // canvas offscreen com realce (Regra 2)
+let tagline='Vista o espírito country';
+
+// "Safe box" do produto: centralizada, generosa, nunca cortada.
+function productBox(){
+  const bw=W*0.80, bh=H*0.52;
+  return {x:(W-bw)/2, y:H*0.205, w:bw, h:bh};
+}
+
+/* Pré-processa a foto do usuário: realce sutil (não muda a cor real) */
+function buildEnhanced(img){
+  const c=document.createElement('canvas');
+  c.width=img.naturalWidth; c.height=img.naturalHeight;
+  const x=c.getContext('2d');
+  // realce contido: contraste/saturação/brilho leves -> valoriza sem artificializar
+  x.filter='contrast(1.06) saturate(1.09) brightness(1.03)';
+  x.drawImage(img,0,0);
+  productEnhanced=c;
+}
+
+/* Desenha o produto encaixado (contain) dentro de uma caixa, com escala/offset
+   de "câmera" (push-in / drift) — sempre limitado para nunca sair cortado. */
+function drawProductFitted(srcW,srcH,box,camScale,camX,camY,drawFn){
+  const fit=Math.min(box.w/srcW, box.h/srcH);   // contain: nada é cortado
+  const s=fit*camScale;
+  const dw=srcW*s, dh=srcH*s;
+  // mantém centralizado + leve movimento de câmera limitado à caixa
+  const maxOff=Math.min(box.w,box.h)*0.06;
+  const ox=clamp(camX,-maxOff,maxOff);
+  const oy=clamp(camY,-maxOff,maxOff);
+  const cx=box.x+box.w/2+ox, cy=box.y+box.h/2+oy;
+  drawFn(cx-dw/2, cy-dh/2, dw, dh);
+}
+
+/* Botina country de couro desenhada por código — placeholder on-brand.
+   (Quando servido por HTTP, a foto REAL do produto carrega automaticamente.) */
+function drawBootPlaceholder(x,y,w,h){
+  ctx.save();
+  ctx.translate(x+w/2,y+h/2);
+  const k=Math.min(w,h)/560;
+  ctx.scale(k,k);
+
+  // sombra de contato no chão
+  ctx.save();
+  ctx.translate(0,210);ctx.scale(1,0.22);
+  const sg=ctx.createRadialGradient(0,0,10,0,0,260);
+  sg.addColorStop(0,'rgba(0,0,0,.6)');sg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=sg;ctx.beginPath();ctx.arc(0,0,260,0,7);ctx.fill();
+  ctx.restore();
+
+  const leather=ctx.createLinearGradient(-180,-200,200,180);
+  leather.addColorStop(0,'#d6a566');leather.addColorStop(.4,'#b6743a');
+  leather.addColorStop(.75,'#8a4f24');leather.addColorStop(1,'#643716');
+
+  // solado
+  ctx.fillStyle='#2a1a0f';
+  ctx.beginPath();
+  ctx.moveTo(-150,150);ctx.lineTo(200,150);
+  ctx.quadraticCurveTo(216,150,216,170);ctx.lineTo(-120,184);
+  ctx.quadraticCurveTo(-150,184,-150,160);ctx.closePath();ctx.fill();
+  // salto
+  ctx.fillRect(-150,150,46,40);
+
+  // cano + corpo da botina (perfil)
+  ctx.fillStyle=leather;
+  ctx.beginPath();
+  ctx.moveTo(-150,-190);                       // topo traseiro do cano
+  ctx.quadraticCurveTo(-40,-208,-18,-198);     // boca do cano
+  ctx.lineTo(-6,-70);                           // frente do tornozelo
+  ctx.quadraticCurveTo(40,-40,170,-6);          // peito do pé -> bico
+  ctx.quadraticCurveTo(208,4,206,40);           // bico arredondado
+  ctx.lineTo(196,150);                          // desce até o solado
+  ctx.lineTo(-150,150);                         // base
+  ctx.closePath();ctx.fill();
+
+  // elástico lateral (Chelsea)
+  ctx.fillStyle='#1c130d';
+  ctx.beginPath();
+  ctx.moveTo(-24,-150);ctx.quadraticCurveTo(28,-150,30,-60);
+  ctx.quadraticCurveTo(28,30,-24,30);ctx.quadraticCurveTo(-44,-60,-24,-150);
+  ctx.closePath();ctx.fill();
+  // nervuras do elástico
+  ctx.strokeStyle='rgba(120,120,120,.4)';ctx.lineWidth=2;
+  for(let i=-130;i<20;i+=14){ctx.beginPath();ctx.moveTo(-30,i);ctx.lineTo(26,i);ctx.stroke();}
+
+  // realce de luz no couro
+  ctx.save();ctx.globalCompositeOperation='lighter';
+  const hg=ctx.createLinearGradient(-40,-120,180,80);
+  hg.addColorStop(0,'rgba(250,215,160,.30)');hg.addColorStop(.6,'rgba(250,215,160,0)');
+  ctx.fillStyle=hg;ctx.beginPath();
+  ctx.moveTo(40,-40);ctx.quadraticCurveTo(150,-10,206,40);ctx.lineTo(196,120);
+  ctx.lineTo(40,120);ctx.closePath();ctx.fill();ctx.restore();
+
+  // costura "arabesco" no bico (assinatura) + costura do solado
+  ctx.strokeStyle='rgba(245,228,195,.8)';ctx.lineWidth=2.6;ctx.setLineDash([5,6]);
+  ctx.beginPath();
+  ctx.moveTo(96,40);ctx.quadraticCurveTo(120,70,150,40);
+  ctx.moveTo(108,64);ctx.quadraticCurveTo(132,96,156,64);
+  ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-148,150);ctx.lineTo(196,150);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // pull tab
+  ctx.fillStyle='#5a3318';ctx.beginPath();
+  ctx.roundRect?ctx.roundRect(-150,-205,40,26,6):ctx.rect(-150,-205,40,26);ctx.fill();
+  ctx.restore();
+}
+
+/* ---------- Texturas / fundo ---------- */
+function paintBackground(t){
+  // céu de fim de tarde country: terroso -> dourado embaixo
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#1a1109');
+  g.addColorStop(0.45,'#3a230f');
+  g.addColorStop(0.72,'#7a3f17');
+  g.addColorStop(0.86,'#b9742a');
+  g.addColorStop(1,'#e7a23b');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+
+  // sol baixo pulsando suavemente
+  const sunY=H*0.9, glow=0.85+0.15*Math.sin(t*1.1);
+  const sg=ctx.createRadialGradient(W*0.5,sunY,20,W*0.5,sunY,W*1.05);
+  sg.addColorStop(0,`rgba(255,214,140,${0.55*glow})`);
+  sg.addColorStop(0.4,`rgba(230,150,60,${0.22*glow})`);
+  sg.addColorStop(1,'rgba(230,150,60,0)');
+  ctx.fillStyle=sg;ctx.fillRect(0,0,W,H);
+
+  // textura de madeira/couro: faixas verticais sutis multiplicadas
+  ctx.save();ctx.globalAlpha=0.06;ctx.globalCompositeOperation='multiply';
+  for(let i=0;i<26;i++){
+    const x=i/26*W;
+    ctx.fillStyle=i%2?'#2a160a':'#5a3318';
+    ctx.fillRect(x,0,W/26,H);
+  }
+  ctx.restore();
+
+  // raio de luz volumétrica diagonal
+  ctx.save();ctx.globalCompositeOperation='lighter';
+  const beam=ctx.createLinearGradient(W*0.1,0,W*0.7,H);
+  const bv=0.10+0.05*Math.sin(t*0.7+1);
+  beam.addColorStop(0,`rgba(255,220,150,${bv})`);
+  beam.addColorStop(0.5,'rgba(255,220,150,0)');
+  ctx.fillStyle=beam;ctx.beginPath();
+  ctx.moveTo(W*0.05,0);ctx.lineTo(W*0.55,0);ctx.lineTo(W*0.95,H);ctx.lineTo(W*0.45,H);ctx.closePath();ctx.fill();
+  ctx.restore();
+}
+
+function paintDust(t,front){
+  ctx.save();ctx.globalCompositeOperation='lighter';
+  for(const p of DUST){
+    if((p.depth<0.45)===front) continue;        // separa camadas
+    const y=((p.y - t*p.sp*0.05 + (p.drift*Math.sin(t*0.5+p.ph))*0.04)%1+1)%1;
+    const x=(p.x + Math.sin(t*0.3+p.ph)*0.01);
+    const tw=0.4+0.6*Math.abs(Math.sin(t*1.3+p.ph));
+    const a=(front?0.10:0.22)*tw;               // poeira da frente bem discreta
+    ctx.fillStyle=`rgba(255,225,170,${a})`;
+    ctx.beginPath();ctx.arc(x*W,y*H,p.r*(front?0.8:1.1),0,7);ctx.fill();
+  }
+  ctx.restore();
+}
+
+function paintGrade(){
+  // vinheta quente (fundo) — escurece bordas, nunca o centro do produto
+  const v=ctx.createRadialGradient(W*0.5,H*0.42,H*0.18,W*0.5,H*0.5,H*0.72);
+  v.addColorStop(0,'rgba(0,0,0,0)');
+  v.addColorStop(1,'rgba(20,10,4,0.62)');
+  ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
+  // grão de filme leve
+  ctx.save();ctx.globalAlpha=0.04;ctx.globalCompositeOperation='overlay';
+  for(let i=0;i<1400;i++){
+    const x=rnd()*W,y=rnd()*H;
+    ctx.fillStyle=rnd()>.5?'#fff':'#000';
+    ctx.fillRect(x,y,1.4,1.4);
+  }
+  ctx.restore();
+}
+
+/* ---------- Tipografia ---------- */
+function drawWordmark(cx,cy,scale,alpha){
+  ctx.save();ctx.globalAlpha=alpha;ctx.translate(cx,cy);ctx.scale(scale,scale);
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  // CHAPELARIA
+  ctx.font='700 76px Cinzel, Georgia, serif';
+  ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=24;ctx.shadowOffsetY=4;
+  const grd=ctx.createLinearGradient(0,-50,0,50);
+  grd.addColorStop(0,'#fff7ea');grd.addColorStop(1,'#e3a857');
+  ctx.fillStyle=grd;
+  ctx.fillText('CHAPELARIA',0,-44);
+  // GARCIA
+  ctx.font='900 116px Cinzel, Georgia, serif';
+  ctx.fillText('GARCIA',0,46);
+  ctx.shadowBlur=0;
+  // florão / linha
+  ctx.strokeStyle='#e3a857';ctx.lineWidth=4;
+  ctx.beginPath();ctx.moveTo(-150,120);ctx.lineTo(-30,120);ctx.moveTo(30,120);ctx.lineTo(150,120);ctx.stroke();
+  ctx.fillStyle='#e3a857';ctx.beginPath();ctx.arc(0,120,9,0,7);ctx.fill();
+  ctx.restore();
+}
+
+function drawCaption(text,y,alpha,size=40){
+  ctx.save();ctx.globalAlpha=alpha;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font=`600 ${size}px Oswald, sans-serif`;
+  ctx.shadowColor='rgba(0,0,0,.7)';ctx.shadowBlur=18;ctx.shadowOffsetY=2;
+  ctx.fillStyle='#f3e7d3';
+  // espaçamento de letras manual p/ ar premium
+  const ls=size*0.10; let total=0;
+  const widths=[...text].map(ch=>{const w=ctx.measureText(ch).width;total+=w+ls;return w;});
+  total-=ls; let x=W/2-total/2;
+  for(let i=0;i<text.length;i++){ctx.fillText(text[i],x+widths[i]/2,y);x+=widths[i]+ls;}
+  ctx.restore();
+}
+
+/* ---------- Produto (composição final, com proteção) ---------- */
+function paintProduct(t,camScale,camX,camY,prodAlpha){
+  const box=productBox();
+  ctx.save();ctx.globalAlpha=prodAlpha;
+
+  // luz de recorte (rim) + brilho atrás do produto — valoriza sem cobrir
+  ctx.save();ctx.globalCompositeOperation='lighter';
+  const halo=ctx.createRadialGradient(W/2,box.y+box.h*0.45,40,W/2,box.y+box.h*0.45,box.w*0.62);
+  const hp=0.5+0.5*Math.sin(t*1.4);
+  halo.addColorStop(0,`rgba(255,210,140,${0.22+0.06*hp})`);
+  halo.addColorStop(0.55,'rgba(255,180,90,0.05)');
+  halo.addColorStop(1,'rgba(255,180,90,0)');
+  ctx.fillStyle=halo;ctx.fillRect(0,0,W,H);
+  ctx.restore();
+
+  // sombra suave de apoio
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=60;ctx.shadowOffsetY=34;
+
+  if(productEnhanced){
+    const iw=productEnhanced.width, ih=productEnhanced.height;
+    drawProductFitted(iw,ih,box,camScale,camX,camY,(dx,dy,dw,dh)=>{
+      ctx.drawImage(productEnhanced,dx,dy,dw,dh);
+    });
+  }else{
+    // placeholder ocupa a caixa quase inteira (produto grande na tela — Regra)
+    drawProductFitted(560,560,box,camScale,camX,camY,(dx,dy,dw,dh)=>{
+      drawBootPlaceholder(dx,dy,dw,dh);
+    });
+  }
+  ctx.restore();
+
+  // brilho de varredura (specular sweep) — passa rápido, realça textura
+  const sweep=window01(t,DURATION*0.30,DURATION*0.62,.5,.5);
+  if(sweep>0){
+    ctx.save();ctx.globalCompositeOperation='lighter';
+    const u=seg(t,DURATION*0.30,DURATION*0.62);
+    const lx=lerp(box.x-80,box.x+box.w+80,u);
+    const sg=ctx.createLinearGradient(lx-120,0,lx+120,0);
+    sg.addColorStop(0,'rgba(255,240,210,0)');
+    sg.addColorStop(0.5,`rgba(255,240,210,${0.18*sweep})`);
+    sg.addColorStop(1,'rgba(255,240,210,0)');
+    ctx.fillStyle=sg;ctx.fillRect(box.x-40,box.y-20,box.w+80,box.h+40);
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+/* ============================================================================
+   TIMELINE — renderFrame(t): t em segundos [0, DURATION]
+   Cena 1 (0–25%)  : entrada do produto (reveal + glow)
+   Cena 2 (25–55%) : herói, push-in + caption inferior
+   Cena 3 (55–80%) : detalhe, drift Ken Burns + caption
+   Cena 4 (80–100%): logo + chamada (produto reduz e sobe, sempre visível)
+============================================================================ */
+function renderFrame(t){
+  const D=DURATION;
+  ctx.clearRect(0,0,W,H);
+  paintBackground(t);
+  paintDust(t,false);            // poeira ao fundo
+
+  // ---- Câmera do produto por cena ----
+  const intro = seg(t,0,D*0.22);            // 0..1 entrada
+  const hero  = seg(t,D*0.22,D*0.55);
+  const detail= seg(t,D*0.55,D*0.80);
+  const outro = seg(t,D*0.80,D);
+
+  let camScale=1, camX=0, camY=0, prodAlpha=1;
+
+  // Entrada: surge de baixo com leve escala
+  const introS = lerp(0.86,1.0, easeOut(intro));
+  const introY = lerp(60,0, easeOut(intro));
+  prodAlpha = smooth(seg(t,0.15,D*0.16));   // fade-in suave
+
+  // Herói: push-in suave
+  const heroS = lerp(1.0,1.07, easeInOut(hero));
+  // Detalhe: Ken Burns drift
+  const detS  = lerp(1.07,1.02, easeInOut(detail));
+  const detX  = lerp(0, 22, easeInOut(detail)) - 11;
+  const detY  = lerp(0, -14, easeInOut(detail));
+  // Outro: recua e sobe para dar lugar ao logo (continua grande e visível)
+  const outS  = lerp(1.0,0.84, easeInOut(outro));
+  const outY  = lerp(0,-H*0.085, easeInOut(outro));
+
+  camScale = introS * heroS * detS * outS / (heroS>1? heroS: heroS); // combinação
+  // recompõe limpo (evita acumular escalas duplicadas)
+  camScale = introS * (1 + (heroS-1) + (detS-1) - (1-outS));
+  camScale = clamp(camScale,0.80,1.12);
+  camX = detX;
+  camY = introY + detY + outY;
+
+  paintProduct(t,camScale,camX,camY,prodAlpha);
+  paintDust(t,true);             // poeira discreta à frente (só bordas)
+
+  // ---- Textos (sempre em zonas seguras, fora do produto) ----
+  // Cena 1: marca discreta no topo durante a entrada
+  const a1=window01(t,0.2,D*0.22,.4,.35);
+  if(a1>0) drawCaption('CHAPELARIA GARCIA', H*0.115, a1*0.9, 34);
+
+  // Cena 2: chamada inferior
+  const a2=window01(t,D*0.24,D*0.54,.35,.3);
+  if(a2>0) drawCaption('Tradição, atitude e presença', H*0.84, a2, 42);
+
+  // Cena 3: chamada inferior 2
+  const a3=window01(t,D*0.56,D*0.79,.3,.3);
+  if(a3>0) drawCaption('Feito para quem vive o country', H*0.84, a3, 42);
+
+  // Cena 4: logo + tagline (produto já recuou para cima)
+  const aLogo=window01(t,D*0.80,D, .28, .12);
+  if(aLogo>0){
+    const ls=lerp(0.82,1.0,easeOut(seg(t,D*0.80,D*0.92)));
+    drawWordmark(W/2, H*0.74, ls, aLogo);
+    const at=window01(t,D*0.86,D,.4,.15);
+    if(at>0) drawCaption(tagline, H*0.86, at, 40);
+  }
+
+  // flare de transição entre detalhe e logo
+  const fl=window01(t,D*0.78,D*0.86,.5,.5);
+  if(fl>0){
+    ctx.save();ctx.globalCompositeOperation='lighter';
+    ctx.fillStyle=`rgba(255,225,170,${0.28*fl})`;ctx.fillRect(0,0,W,H);
+    ctx.restore();
+  }
+
+  paintGrade();                  // vinheta + grão (fundo/bordas)
+}
+
+/* ============================================================================
+   Loop de prévia + Gravação
+============================================================================ */
+let paused=false, recording=false;
+let loopStart=performance.now();
+let recStart=0, recorder=null, chunks=[];
+
+function frame(now){
+  if(recording){
+    const t=(now-recStart)/1000;
+    if(t>=DURATION){ stopRecording(); }
+    else renderFrame(t);
+  }else if(!paused){
+    const t=((now-loopStart)/1000)%DURATION;
+    renderFrame(t);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+renderFrame(0);
+
+/* ---- Controles ---- */
+const playBtn=document.getElementById('playBtn');
+playBtn.onclick=()=>{
+  paused=!paused;
+  playBtn.textContent=paused?'▶ Retomar prévia':'⏸ Pausar prévia';
+  if(!paused) loopStart=performance.now();
+};
+document.getElementById('restartBtn').onclick=()=>{loopStart=performance.now();paused=false;playBtn.textContent='⏸ Pausar prévia';};
+
+const durEl=document.getElementById('dur'), durVal=document.getElementById('durVal');
+durEl.oninput=()=>{DURATION=+durEl.value;durVal.textContent=DURATION+'s';loopStart=performance.now();};
+
+document.getElementById('tagline').oninput=e=>{tagline=e.target.value||' ';};
+
+/* ---- Upload do produto ---- */
+const drop=document.getElementById('drop'), fileEl=document.getElementById('file');
+drop.onclick=()=>fileEl.click();
+fileEl.onchange=e=>{ if(e.target.files[0]) loadProduct(e.target.files[0]); };
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)loadProduct(f);});
+
+function loadProduct(file){
+  const url=URL.createObjectURL(file);
+  const img=new Image();
+  img.onload=()=>{ productImg=img; buildEnhanced(img); URL.revokeObjectURL(url);
+    statusEl.textContent='Produto carregado ✓ — agora ele é o protagonista.';
+    drop.innerHTML='<b>Produto carregado ✓</b><br/>Clique para trocar a imagem'; };
+  img.onerror=()=>{statusEl.textContent='Não consegui ler a imagem.';};
+  img.src=url;
+}
+
+/* Auto-carrega a foto REAL do produto (quando servido por HTTP).
+   Recorta a botina e aplica realce contido (mesma lógica do render.py). */
+function loadDefaultProduct(){
+  const img=new Image();
+  img.onload=()=>{
+    const box=[95,150,398,602];                 // recorte do herói (src 474x850)
+    const cw=box[2]-box[0], ch=box[3]-box[1];
+    const c=document.createElement('canvas');c.width=cw;c.height=ch;
+    const x=c.getContext('2d');
+    x.filter='contrast(1.08) saturate(1.12) brightness(1.06)';
+    x.drawImage(img,box[0],box[1],cw,ch,0,0,cw,ch);
+    productEnhanced=c;
+    statusEl.textContent='Produto real carregado ✓ — botina country protagonista.';
+    drop.innerHTML='<b>Produto real em cena ✓</b><br/>Clique para usar outra foto';
+  };
+  img.onerror=()=>{/* abriu via file:// — segue com o placeholder desenhado */};
+  img.src='produto/frame_hero.png';
+}
+loadDefaultProduct();
+
+/* ---- Gravação (MediaRecorder) ---- */
+function pickMime(){
+  const opts=['video/mp4;codecs=avc1.42E01E','video/mp4',
+              'video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+  return opts.find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||'';
+}
+const recBtn=document.getElementById('recBtn');
+recBtn.onclick=()=>{ recording?null:startRecording(); };
+
+function startRecording(){
+  const mime=pickMime();
+  if(!mime){statusEl.textContent='MediaRecorder não suportado neste navegador.';return;}
+  const stream=cv.captureStream(FPS);
+  chunks=[];
+  recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:12_000_000});
+  recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+  recorder.onstop=finishRecording;
+  recording=true; recStart=performance.now();
+  recorder.start();
+  recBtn.disabled=true; playBtn.disabled=true;
+  badgeEl.textContent='● Gravando…'; badgeEl.style.color='#ff7a59';
+  statusEl.textContent='Gravando o comercial ('+DURATION+'s)…';
+}
+function stopRecording(){ if(recorder&&recorder.state!=='inactive')recorder.stop(); recording=false; }
+function finishRecording(){
+  const mime=recorder.mimeType||'video/webm';
+  const ext=mime.includes('mp4')?'mp4':'webm';
+  const blob=new Blob(chunks,{type:mime});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=`chapelaria-garcia-comercial.${ext}`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+  recBtn.disabled=false; playBtn.disabled=false;
+  badgeEl.textContent='● Prévia ao vivo'; badgeEl.style.color='';
+  statusEl.textContent=`Vídeo .${ext} renderizado e baixado ✓ (${(blob.size/1048576).toFixed(1)} MB)`;
+  loopStart=performance.now();
+}
+</script>
+</body>
+</html>
