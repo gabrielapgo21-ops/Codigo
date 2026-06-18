@@ -6,3 +6,10 @@ coverage/
 *.log
 .env*
 !.env.example
+*.zip
+
+# Local one-off build artifacts
+index-standalone.html
+site-1-arquivo/
+site-corrigido/
+site-flat/
